@@ -39,6 +39,28 @@ class SiteController extends Controller
     }
 
     /**
+     * Handle language switching (defaulting to ar-SA).
+     */
+    public function beforeAction($action)
+    {
+        $session = Yii::$app->session;
+        $request = Yii::$app->request;
+
+        $lang = $request->get('lang');
+        if ($lang && in_array($lang, ['ar-SA', 'en-US'])) {
+            $session->set('language', $lang);
+        }
+
+        if ($session->has('language')) {
+            Yii::$app->language = $session->get('language');
+        } else {
+            Yii::$app->language = 'ar-SA';
+        }
+
+        return parent::beforeAction($action);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function actions()

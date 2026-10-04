@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Residential HVAC & Electrical Repair & Installation Services';
+$this->title = Yii::t('app', 'SystemsTitle');
 ?>
 
 <!-- Hero Section -->
@@ -13,45 +13,45 @@ $this->title = 'Residential HVAC & Electrical Repair & Installation Services';
         <div class="row align-items-center g-5">
             <div class="col-lg-7">
                 <div class="hero-badge">
-                    <i class="bi bi-patch-check-fill text-warning"></i> Certified & Licensed HVAC & Electrical Experts
+                    <i class="bi bi-patch-check-fill text-warning"></i> <?= Yii::t('app', 'HeroBadge') ?>
                 </div>
                 <h1 class="hero-title">
-                    Keep Your Home Cool, Safe & Efficient with <span>ClimateTech Pro</span>
+                    <?= Yii::t('app', 'HeroTitlePrefix') ?> <span><?= Yii::t('app', 'HeroTitleBrand') ?></span>
                 </h1>
                 <p class="hero-lead">
-                    Fast 24/7 Service, Transparent Pricing, and Expert Certified Technicians for Split AC, Floor Standing, Cassette & Package Central Units.
+                    <?= Yii::t('app', 'HeroLead') ?>
                 </p>
 
                 <div class="d-flex flex-wrap gap-3 mb-4">
                     <div class="d-flex align-items-center gap-2 bg-dark bg-opacity-50 px-3 py-2 rounded-3 border border-secondary">
                         <i class="bi bi-clock-history text-warning fs-4"></i>
                         <div>
-                            <div class="fw-bold text-white small">Same-Day Service</div>
-                            <div class="text-secondary extra-small" style="font-size: 0.75rem;">Dispatched in under 60 mins</div>
+                            <div class="fw-bold text-white small"><?= Yii::t('app', 'SameDayDispatch') ?></div>
+                            <div class="text-secondary extra-small" style="font-size: 0.75rem;"><?= Yii::t('app', 'DispatchedUnder60') ?></div>
                         </div>
                     </div>
                     <div class="d-flex align-items-center gap-2 bg-dark bg-opacity-50 px-3 py-2 rounded-3 border border-secondary">
                         <i class="bi bi-shield-lock-fill text-info fs-4"></i>
                         <div>
-                            <div class="fw-bold text-white small">1-Year Repair Warranty</div>
-                            <div class="text-secondary extra-small" style="font-size: 0.75rem;">100% Satisfaction Guarantee</div>
+                            <div class="fw-bold text-white small"><?= Yii::t('app', 'Warranty1Year') ?></div>
+                            <div class="text-secondary extra-small" style="font-size: 0.75rem;"><?= Yii::t('app', 'Satisfaction100') ?></div>
                         </div>
                     </div>
                     <div class="d-flex align-items-center gap-2 bg-dark bg-opacity-50 px-3 py-2 rounded-3 border border-secondary">
                         <i class="bi bi-star-fill text-warning fs-4"></i>
                         <div>
-                            <div class="fw-bold text-white small">4.9 / 5.0 Rating</div>
-                            <div class="text-secondary extra-small" style="font-size: 0.75rem;">Over 2,500 Homeowners</div>
+                            <div class="fw-bold text-white small"><?= Yii::t('app', 'RatingScore') ?></div>
+                            <div class="text-secondary extra-small" style="font-size: 0.75rem;"><?= Yii::t('app', 'OverHomeowners') ?></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex gap-3">
                     <a href="tel:8005554822" class="btn btn-accent btn-lg text-white">
-                        <i class="bi bi-telephone-outbound-fill me-2"></i> Call Now: (800) 555-4822
+                        <i class="bi bi-telephone-outbound-fill me-2"></i> <?= Yii::t('app', 'CallNowBtn') ?>
                     </a>
                     <a href="#services" class="btn btn-outline-light btn-lg rounded-3">
-                        <i class="bi bi-tools me-2"></i> Explore Services
+                        <i class="bi bi-tools me-2"></i> <?= Yii::t('app', 'ExploreServicesBtn') ?>
                     </a>
                 </div>
             </div>
