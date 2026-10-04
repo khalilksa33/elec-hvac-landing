@@ -42,14 +42,16 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'privacy' => 'site/privacy',
+                'terms' => 'site/terms',
+                'erp-dashboard' => 'site/erp-dashboard',
+                'book-lead' => 'site/book-lead',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

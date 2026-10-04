@@ -25,7 +25,7 @@ jobs:
         run: |
           composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-      - name: 📂 Deploy via SFTP to Hostinger
+      - name: 📂 Deploy via SFTP to Hostinger (Subdomain / Subfolder)
         uses: SamKirsch/sftp-action@v1.0.0
         with:
           host: ${{ secrets.HOSTINGER_SSH_HOST }}
@@ -33,10 +33,12 @@ jobs:
           password: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
           port: ${{ secrets.HOSTINGER_SSH_PORT || '6588' }}
           local_path: './*'
-          remote_path: '/home/u123456789/domains/yourdomain.com/public_html/'
+          # For Subdomain (e.g. hvac.yourdomain.com): /home/u123456789/domains/yourdomain.com/public_html/hvac/
+          # For Subfolder (e.g. yourdomain.com/hvac/): /home/u123456789/domains/yourdomain.com/public_html/hvac/
+          remote_path: ${{ secrets.HOSTINGER_REMOTE_PATH || '/home/u123456789/domains/yourdomain.com/public_html/hvac/' }}
           delete_remote: false
 
-      - name: ⚡ Post-Deployment Remote Commands (Database Migrations & Cache Clearing)
+      - name: ⚡ Post-Deployment Remote Commands (Subdomain / Subfolder Permissions & Cache)
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOSTINGER_SSH_HOST }}
@@ -44,7 +46,7 @@ jobs:
           password: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
           port: ${{ secrets.HOSTINGER_SSH_PORT || '6588' }}
           script: |
-            cd /home/u123456789/domains/yourdomain.com/public_html/
+            cd ${{ secrets.HOSTINGER_REMOTE_PATH || '/home/u123456789/domains/yourdomain.com/public_html/hvac/' }}
             chmod -R 777 runtime web/assets
             php yii migrate --interactive=0
             php yii cache/flush-all
