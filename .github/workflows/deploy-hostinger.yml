@@ -25,17 +25,16 @@ jobs:
         run: |
           composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-      - name: 📂 Deploy via SFTP to Hostinger (Subdomain works.dynapulsar.com)
-        uses: SamKirsch/sftp-action@v1.0.0
+      - name: 📂 Deploy via SFTP to Hostinger (works.dynapulsar.com)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host: ${{ secrets.HOSTINGER_SSH_HOST }}
+          server: ${{ secrets.HOSTINGER_SSH_HOST }}
           username: ${{ secrets.HOSTINGER_SSH_USER }}
           password: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
-          port: ${{ secrets.HOSTINGER_SSH_PORT || '6588' }}
-          local_path: './*'
-          # Subdomain path: /home/u998578075/domains/dynapulsar.com/public_html/works/
-          remote_path: ${{ secrets.HOSTINGER_REMOTE_PATH || '/home/u998578075/domains/dynapulsar.com/public_html/works/' }}
-          delete_remote: false
+          port: ${{ secrets.HOSTINGER_SSH_PORT || 22 }}
+          protocol: sftp
+          local-dir: ./
+          server-dir: ${{ secrets.HOSTINGER_REMOTE_PATH || '/home/u998578075/domains/dynapulsar.com/public_html/works/' }}
 
       - name: ⚡ Post-Deployment Remote Commands (Subdomain Permissions & Cache)
         uses: appleboy/ssh-action@v1.0.3
