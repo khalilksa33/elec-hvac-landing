@@ -392,24 +392,3 @@ $this->title = Yii::t('app', 'SystemsTitle');
         </div>
     </div>
 </section>
-
-<!-- Google Ads Compliance Guarantee Section -->
-<section class="py-5 bg-white border-top">
-    <div class="container">
-        <div class="row align-items-center g-4">
-            <div class="col-md-2 text-center">
-                <i class="bi bi-google text-primary" style="font-size: 4rem;"></i>
-            </div>
-            <div class="col-md-10">
-                <h4 class="fw-bold text-dark">Google Ads Fully Compliant & Certified Landing Page Architecture</h4>
-                <p class="text-muted mb-2">This website strictly adheres to Google Ads Policies for Local Home & HVAC Services: full physical business disclosures, transparent licensing, no misleading medical/cooling claims, accessible Privacy Policy & Terms of Service, and explicit conversion tracking setup.</p>
-                <div class="d-flex flex-wrap gap-3 extra-small fw-bold text-secondary">
-                    <span><i class="bi bi-shield-check text-success"></i> Physical Address Disclosed</span>
-                    <span><i class="bi bi-shield-check text-success"></i> Clear Service Pricing</span>
-                    <span><i class="bi bi-shield-check text-success"></i> SSL Encryption Verified</span>
-                    <span><i class="bi bi-shield-check text-success"></i> User Consent & Data Protection</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>

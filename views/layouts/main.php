@@ -43,7 +43,8 @@ $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font
     NavBar::begin([
         'brandLabel' => '<div class="navbar-brand-text text-white"><i class="bi bi-snow2 text-info me-2"></i>' . Yii::t('app', 'BrandTitle') . '</div>',
         'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-lg navbar-dark navbar-custom fixed-top shadow-sm']
+        'options' => ['class' => 'navbar-expand-lg navbar-dark navbar-custom fixed-top shadow-sm px-3 px-lg-4'],
+        'containerOptions' => ['class' => 'container-fluid px-0']
     ]);
 
     // Language Toggle Target URL
@@ -77,9 +78,14 @@ $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font
     ?>
 </header>
 
-<main id="main" class="flex-shrink-0" role="main">
+<?php 
+$isHomePage = Yii::$app->controller->action->id === 'index';
+$mainPaddingClass = $isHomePage ? 'pt-0' : 'pt-5 mt-4';
+?>
+
+<main id="main" class="flex-shrink-0 <?= $mainPaddingClass ?>" role="main">
     <?php if (isset($this->params['breadcrumbs']) && !empty($this->params['breadcrumbs'])): ?>
-        <div class="container pt-5 mt-4">
+        <div class="container pt-4">
             <?= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
         </div>
     <?php endif ?>
