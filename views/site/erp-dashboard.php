@@ -5,7 +5,60 @@ use yii\helpers\Url;
 
 $this->title = 'HVAC & Electrical Enterprise ERP';
 $isArabic = strpos(Yii::$app->language, 'ar') === 0;
+
+$companyNameAr = Html::encode($company['name_ar'] ?? 'شركة كلايميت تك لأنظمة التكييف والكهرباء المحدودة');
+$companyNameEn = Html::encode($company['name_en'] ?? 'ClimateTech Electrical & HVAC Solutions Co. Ltd.');
+$crNum = Html::encode($company['cr_number'] ?? '1010889421');
+$vatNum = Html::encode($company['vat_number'] ?? '310488942100003');
+$permitNum = Html::encode($company['permit_number'] ?? 'HVAC-EL-2026-8894');
+$hotline = Html::encode($company['phone'] ?? '(800) 555-4822');
+$waNum = Html::encode($company['whatsapp'] ?? '+966500000000');
+$compEmail = Html::encode($company['email'] ?? 'hello@dynapulsar.com');
+
+$bldg = Html::encode($company['building_no'] ?? '7420');
+$streetAr = Html::encode($company['street_ar'] ?? 'طريق الملك فهد الفرعي');
+$streetEn = Html::encode($company['street_en'] ?? 'King Fahd Branch Road');
+$distAr = Html::encode($company['district_ar'] ?? 'حي العليا');
+$distEn = Html::encode($company['district_en'] ?? 'Al Olaya District');
+$cityAr = Html::encode($company['city_ar'] ?? 'الرياض 12214');
+$cityEn = Html::encode($company['city_en'] ?? 'Riyadh 12214');
+$addNo = Html::encode($company['additional_no'] ?? '3892');
+$unitAr = Html::encode($company['unit_no_ar'] ?? 'مكتب 402');
+$unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
 ?>
+
+<style>
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    .modal.show .printable-area, .modal.show .printable-area * {
+        visibility: visible !important;
+    }
+    .modal.show .printable-area {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        padding: 20px !important;
+        margin: 0 !important;
+        background: #fff !important;
+    }
+    .modal-header, .modal-footer, .btn-close, .no-print {
+        display: none !important;
+    }
+}
+.thermal-receipt {
+    width: 300px;
+    margin: 0 auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+}
+.thermal-divider {
+    border-top: 1px dashed #000;
+    margin: 8px 0;
+}
+</style>
 
 <div class="container-fluid py-4 px-4 bg-light min-vh-100">
     <!-- Header Banner -->
@@ -135,7 +188,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                     <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
                         <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
                             <h5 class="fw-bold text-dark m-0"><i class="bi bi-envelope-open-fill text-primary me-2"></i><?= $isArabic ? 'استفسارات ومطلوبات العملاء الجدد (Direct Inquiries)' : 'Live Customer Inquiries & Email Sync' ?></h5>
-                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Sync: hello@dynapulsar.com</span>
+                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Sync: <?= $compEmail ?></span>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0">
@@ -363,7 +416,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <th><?= $isArabic ? 'ضريبة القيمة المضافة (15%)' : 'VAT Amount (15%)' ?></th>
                                 <th><?= $isArabic ? 'الإجمالي الصافي' : 'Total Net' ?></th>
                                 <th><?= $isArabic ? 'رمز QR وشفرة ZATCA' : 'ZATCA QR Code' ?></th>
-                                <th><?= $isArabic ? 'الإجراء' : 'Actions' ?></th>
+                                <th><?= $isArabic ? 'معاينة وطباعة' : 'Print Actions' ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -374,10 +427,13 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td>450.00 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
                                 <td>67.50 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
                                 <td class="fw-bold text-success">517.50 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
-                                <td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '517.50')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
+                                <td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '450.00', '67.50', '517.50')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '517.50')"><i class="bi bi-printer me-1"></i> PDF</button>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="viewXmlInvoice('INV-2026-00891')"><i class="bi bi-file-earmark-code me-1"></i> XML</button>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '450.00', '67.50', '517.50')"><i class="bi bi-file-earmark-pdf me-1"></i> A4 PDF</button>
+                                        <button class="btn btn-outline-dark" onclick="viewThermalInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '517.50')"><i class="bi bi-receipt me-1"></i> POS 80mm</button>
+                                        <button class="btn btn-outline-secondary" onclick="viewXmlInvoice('INV-2026-00891')"><i class="bi bi-file-earmark-code"></i> XML</button>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -387,10 +443,13 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td>11,200.00 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
                                 <td>1,680.00 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
                                 <td class="fw-bold text-success">12,880.00 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
-                                <td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '12,880.00')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
+                                <td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '11,200.00', '1,680.00', '12,880.00')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '12,880.00')"><i class="bi bi-printer me-1"></i> PDF</button>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="viewXmlInvoice('INV-2026-00892')"><i class="bi bi-file-earmark-code me-1"></i> XML</button>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '11,200.00', '1,680.00', '12,880.00')"><i class="bi bi-file-earmark-pdf me-1"></i> A4 PDF</button>
+                                        <button class="btn btn-outline-dark" onclick="viewThermalInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '12,880.00')"><i class="bi bi-receipt me-1"></i> POS 80mm</button>
+                                        <button class="btn btn-outline-secondary" onclick="viewXmlInvoice('INV-2026-00892')"><i class="bi bi-file-earmark-code"></i> XML</button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -506,77 +565,111 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
             </div>
         </div>
 
-        <!-- TAB 5: Company Settings, VAT, CR & National Address -->
+        <!-- TAB 5: Company Settings, VAT, CR & National Address (Bilingual Form) -->
         <div class="tab-pane fade" id="settings" role="tabpanel">
             <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
                 <div class="border-bottom pb-3 mb-4">
-                    <h4 class="fw-bold text-dark m-0"><i class="bi bi-building-gear text-primary me-2"></i><?= $isArabic ? 'إعدادات بيانات الشركة والرقم الضريبي والسجل التجاري' : 'Company Info, VAT Number & Commercial Register (CR)' ?></h4>
-                    <p class="text-muted small mb-0"><?= $isArabic ? 'هذه البيانات تُستخدم تلقائياً في ترويسة الفواتير الإلكترونية (ZATCA) وعروض الأسعار ومُعرّفات إعلانات جوجل.' : 'These details are automatically printed on ZATCA E-Invoices, quotes, and Google Ads metadata.' ?></p>
+                    <h4 class="fw-bold text-dark m-0"><i class="bi bi-building-gear text-primary me-2"></i><?= $isArabic ? 'إعدادات بيانات الشركة والرقم الضريبي والسجل التجاري' : 'Bilingual Company Info, VAT Number & Commercial Register (CR)' ?></h4>
+                    <p class="text-muted small mb-0"><?= $isArabic ? 'هذه البيانات تُحفظ بالنظام باللغتين العربية والإنجليزية وتنعكس تلقائياً في صفحة الاتصال، ترويسات الفواتير الضريبية، ومستندات هيئة الزكاة (ZATCA).' : 'These details are stored in both Arabic & English to dynamically reflect on the Contact page, E-Invoices header, and ZATCA records.' ?></p>
                 </div>
 
-                <form id="company-settings-form" onsubmit="event.preventDefault(); alert('<?= $isArabic ? 'تم حفظ إعدادات الشركة والسجل التجاري والواتساب بنجاح!' : 'Company settings, CR, VAT & WhatsApp saved successfully!' ?>');">
+                <?php if (Yii::$app->session->hasFlash('companySaved')): ?>
+                    <div class="alert alert-success d-flex align-items-center rounded-3 p-3 mb-4">
+                        <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+                        <div><strong><?= $isArabic ? 'تم حفظ بيانات وإعدادات الشركة والسجل التجاري باللغتين بنجاح!' : 'Bilingual Company settings, CR, VAT & address saved successfully!' ?></strong></div>
+                    </div>
+                <?php endif; ?>
+
+                <form id="company-settings-form" action="<?= Url::to(['/site/save-company-settings']) ?>" method="POST">
+                    <input type="hidden" name="<?= Yii::$app->request->csrfParam ?>" value="<?= Yii::$app->request->getCsrfToken() ?>">
+
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'اسم الشركة / المؤسسة الرسمي' : 'Official Registered Company Name' ?> <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" value="<?= $isArabic ? 'شركة كلايميت تك لأنظمة التكييف والكهرباء المحدودة' : 'ClimateTech Electrical & HVAC Solutions Co. Ltd.' ?>" required>
+                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'اسم الشركة / المؤسسة (بالعربية)' : 'Official Company Name (Arabic)' ?> <span class="text-danger">*</span></label>
+                            <input type="text" name="Company[name_ar]" class="form-control form-control-lg" value="<?= $companyNameAr ?>" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم السجل التجاري (CR Number)' : 'Commercial Registration Number (CR)' ?> <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" value="1010889421" required>
+                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'اسم الشركة / المؤسسة (بالإنجليزية)' : 'Official Company Name (English)' ?> <span class="text-danger">*</span></label>
+                            <input type="text" name="Company[name_en]" class="form-control form-control-lg" value="<?= $companyNameEn ?>" required>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم السجل التجاري (CR Number)' : 'Commercial Register (CR Number)' ?> <span class="text-danger">*</span></label>
+                            <input type="text" name="Company[cr_number]" class="form-control form-control-lg" value="<?= $crNum ?>" required>
+                        </div>
+                        <div class="col-md-4">
                             <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم التسجيل الضريبي (VAT Number - 15 رقم)' : 'VAT Identification Number (15 Digits)' ?> <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" value="310488942100003" required>
+                            <input type="text" name="Company[vat_number]" class="form-control form-control-lg" value="<?= $vatNum ?>" required>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الترخيص المعتمد' : 'Licensed HVAC Activity Permit #' ?></label>
-                            <input type="text" class="form-control form-control-lg" value="HVAC-EL-2026-8894">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الترخيص المعتمد' : 'Licensed Activity Permit #' ?></label>
+                            <input type="text" name="Company[permit_number]" class="form-control form-control-lg" value="<?= $permitNum ?>">
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الهاتف الرئيسي للاتصال (Calling Widget)' : 'Primary Hotline Number (Calling Widget)' ?> <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" value="(800) 555-4822" required>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الهاتف الرئيسي للاتصال (Hotline)' : 'Primary Hotline Phone' ?> <span class="text-danger">*</span></label>
+                            <input type="text" name="Company[phone]" class="form-control form-control-lg" value="<?= $hotline ?>" required>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الواتساب المباشر للعملاء (WhatsApp Widget)' : 'Direct Customer WhatsApp Number' ?> <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-lg" value="+966500000000" placeholder="+966XXXXXXXXX" required>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الواتساب المباشر (WhatsApp)' : 'Direct WhatsApp Number' ?> <span class="text-danger">*</span></label>
+                            <input type="text" name="Company[whatsapp]" class="form-control form-control-lg" value="<?= $waNum ?>" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'البريد الإلكتروني للشركة' : 'Official Support Email' ?> <span class="text-danger">*</span></label>
+                            <input type="email" name="Company[email]" class="form-control form-control-lg" value="<?= $compEmail ?>" required>
                         </div>
 
                         <div class="col-12">
-                            <h5 class="fw-bold text-dark mt-3 mb-2"><i class="bi bi-map me-2 text-danger"></i><?= $isArabic ? 'العنوان الوطني الرسمي (National Address Details)' : 'Official National Address Details' ?></h5>
+                            <h5 class="fw-bold text-dark mt-4 mb-2"><i class="bi bi-map me-2 text-danger"></i><?= $isArabic ? 'العنوان الوطني الرسمي باللغتين (National Address Details)' : 'Bilingual National Address Details' ?></h5>
                         </div>
 
                         <div class="col-md-3">
                             <label class="form-label fw-bold small"><?= $isArabic ? 'رقم المبنى (Building No)' : 'Building No' ?></label>
-                            <input type="text" class="form-control" value="7420">
+                            <input type="text" name="Company[building_no]" class="form-control" value="<?= $bldg ?>">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'اسم الشارع (Street Name)' : 'Street Name' ?></label>
-                            <input type="text" class="form-control" value="<?= $isArabic ? 'طريق الملك فهد الفرعي' : 'King Fahd Branch Road' ?>">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'اسم الشارع (عربي)' : 'Street Name (Arabic)' ?></label>
+                            <input type="text" name="Company[street_ar]" class="form-control" value="<?= $streetAr ?>">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'الحي (District)' : 'District' ?></label>
-                            <input type="text" class="form-control" value="<?= $isArabic ? 'حي العليا' : 'Al Olaya District' ?>">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'اسم الشارع (إنجليزي)' : 'Street Name (English)' ?></label>
+                            <input type="text" name="Company[street_en]" class="form-control" value="<?= $streetEn ?>">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'المدينة والرمز البريدي (City & Zip)' : 'City & Postal Zip' ?></label>
-                            <input type="text" class="form-control" value="<?= $isArabic ? 'الرياض 12214' : 'Riyadh 12214' ?>">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'الرمز الإضافي' : 'Additional No' ?></label>
+                            <input type="text" name="Company[additional_no]" class="form-control" value="<?= $addNo ?>">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'الرقم الإضافي (Additional No)' : 'Additional No' ?></label>
-                            <input type="text" class="form-control" value="3892">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'الحي (عربي)' : 'District (Arabic)' ?></label>
+                            <input type="text" name="Company[district_ar]" class="form-control" value="<?= $distAr ?>">
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'الرمز الإضافي / الوحدة' : 'Unit / Suite No' ?></label>
-                            <input type="text" class="form-control" value="<?= $isArabic ? 'مكتب 402' : 'Office 402' ?>">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'الحي (إنجليزي)' : 'District (English)' ?></label>
+                            <input type="text" name="Company[district_en]" class="form-control" value="<?= $distEn ?>">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'المدينة والرمز البريدي (عربي)' : 'City & Zip (Arabic)' ?></label>
+                            <input type="text" name="Company[city_ar]" class="form-control" value="<?= $cityAr ?>">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'المدينة والرمز البريدي (إنجليزي)' : 'City & Zip (English)' ?></label>
+                            <input type="text" name="Company[city_en]" class="form-control" value="<?= $cityEn ?>">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'الوحدة / الرقم الإضافي (عربي)' : 'Unit / Suite No (Arabic)' ?></label>
+                            <input type="text" name="Company[unit_no_ar]" class="form-control" value="<?= $unitAr ?>">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'الوحدة / الرقم الإضافي (إنجليزي)' : 'Unit / Suite No (English)' ?></label>
+                            <input type="text" name="Company[unit_no_en]" class="form-control" value="<?= $unitEn ?>">
                         </div>
                     </div>
 
                     <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
                         <button type="reset" class="btn btn-outline-secondary px-4"><?= $isArabic ? 'إلغاء التغييرات' : 'Discard Changes' ?></button>
-                        <button type="submit" class="btn btn-primary px-5 fw-bold"><i class="bi bi-floppy me-1"></i> <?= $isArabic ? 'حفظ إعدادات الشركة والفواتير' : 'Save Company & Tax Settings' ?></button>
+                        <button type="submit" class="btn btn-primary px-5 fw-bold"><i class="bi bi-floppy me-1"></i> <?= $isArabic ? 'حفظ إعدادات الشركة والفواتير' : 'Save Bilingual Company Settings' ?></button>
                     </div>
                 </form>
             </div>
@@ -626,85 +719,159 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
     </div>
 </div>
 
-<!-- Modal 2: View ZATCA PDF Print Invoice -->
+<!-- Modal 2: Standard A4 ZATCA PDF Print Invoice (No Overlapping Elements) -->
 <div class="modal fade" id="pdfInvoiceModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header bg-primary text-white rounded-top-4">
-                <h5 class="modal-title fw-bold"><i class="bi bi-printer me-2"></i><?= $isArabic ? 'معاينة وطباعة الفاتورة الضريبية (ZATCA PDF)' : 'ZATCA Tax Invoice PDF Preview' ?></h5>
+            <div class="modal-header bg-primary text-white rounded-top-4 no-print">
+                <h5 class="modal-title fw-bold"><i class="bi bi-file-earmark-pdf me-2"></i><?= $isArabic ? 'معاينة وطباعة الفاتورة الضريبية القياسية A4' : 'Standard A4 ZATCA Tax Invoice Preview' ?></h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-4 bg-white" id="pdf-print-area">
-                <div class="d-flex justify-content-between border-bottom pb-3 mb-3">
-                    <div>
-                        <h4 class="fw-extrabold text-dark m-0">شركة كلايميت تك لأنظمة التكييف المحدودة</h4>
-                        <div class="extra-small text-muted">ClimateTech HVAC & Electrical Systems Co.</div>
-                        <div class="extra-small text-muted mt-1">الرقم الضريبي: <strong>310488942100003</strong> | السجل التجاري: <strong>1010889421</strong></div>
-                        <div class="extra-small text-muted">الرياض - حي العليا - طريق الملك فهد - مبنى 7420</div>
+            <div class="modal-body p-4 bg-white printable-area" id="a4-invoice-content">
+                <div class="border p-4 rounded-3 bg-white" style="font-family: Arial, sans-serif;">
+                    <!-- Invoice Header -->
+                    <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+                        <div>
+                            <h4 class="fw-bold text-dark mb-1"><?= $companyNameAr ?></h4>
+                            <div class="text-muted small"><?= $companyNameEn ?></div>
+                            <div class="extra-small text-muted mt-2">
+                                <div><strong>الرقم الضريبي (VAT):</strong> <?= $vatNum ?></div>
+                                <div><strong>السجل التجاري (CR):</strong> <?= $crNum ?> | <strong>الترخيص:</strong> <?= $permitNum ?></div>
+                                <div><strong>العنوان:</strong> <?= $bldg ?> <?= $streetAr ?> - <?= $distAr ?> - <?= $cityAr ?></div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-success fs-6 mb-2">فاتورة ضريبية مبسطة ZATCA</span>
+                            <h5 class="fw-bold text-primary m-0" id="pdf-inv-num">INV-2026-00891</h5>
+                            <div class="extra-small text-muted mt-1">تاريخ الإصدار: <?= date('Y-m-d H:i') ?></div>
+                        </div>
                     </div>
-                    <div class="text-end">
-                        <span class="badge bg-success fs-6 mb-2">فاتورة ضريبية مبسطة</span>
-                        <div class="fw-bold text-dark" id="pdf-inv-num">INV-2026-00891</div>
-                        <div class="extra-small text-muted">التاريخ: <?= date('Y-m-d H:i') ?></div>
-                    </div>
-                </div>
 
-                <div class="row g-3 mb-4">
-                    <div class="col-6">
-                        <div class="p-3 bg-light rounded-3">
-                            <div class="extra-small text-muted">عميل الفاتورة:</div>
-                            <div class="fw-bold text-dark fs-6" id="pdf-cust-name">سعد العتيبي</div>
+                    <!-- Customer Info -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-3 border">
+                                <div class="extra-small text-muted fw-bold">اسم العميل:</div>
+                                <div class="fw-bold text-dark fs-6" id="pdf-cust-name">سعد العتيبي</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 bg-light rounded-3 border text-end">
+                                <div class="extra-small text-muted fw-bold">حالة الفاتورة والربط:</div>
+                                <div class="fw-bold text-success fs-6"><i class="bi bi-shield-check me-1"></i> مدفوعة (ZATCA Verified)</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="p-3 bg-light rounded-3 text-end">
-                            <div class="extra-small text-muted">حالة السداد:</div>
-                            <div class="fw-bold text-success fs-6"><i class="bi bi-check-circle me-1"></i> مدفوع (ZATCA Verified)</div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="table-responsive mb-4">
-                    <table class="table table-bordered align-middle extra-small">
-                        <thead class="bg-light">
-                            <tr>
-                                <th>الوصف / الخدمة</th>
-                                <th>المبلغ (غير شامل)</th>
-                                <th>ضريبة القيمة المضافة (15%)</th>
-                                <th>الإجمالي الصافي</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>صيانة غسيل نفاث وسحب فريون وتعبئة R410A</td>
-                                <td>450.00 ر.س</td>
-                                <td>67.50 ر.س</td>
-                                <td class="fw-bold text-success" id="pdf-total-val">517.50 ر.س</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 border">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="bg-white p-2 border rounded-3 text-center">
-                            <i class="bi bi-qr-code fs-1 text-dark"></i>
-                            <div class="extra-small text-muted" style="font-size: 8px;">ZATCA TLV STAMP</div>
-                        </div>
-                        <div class="extra-small text-muted">
-                            <div><strong>رمز QR مشفر وفق معايير هيئة الزكاة (Phase 2)</strong></div>
-                            <div>Hash: 4a8e8f90c12e34bd7810fe90aa812f</div>
-                        </div>
+                    <!-- Line Items Table -->
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered align-middle extra-small mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>الوصف / الخدمة</th>
+                                    <th>المبلغ (غير شامل الضريبة)</th>
+                                    <th>ضريبة القيمة المضافة (15%)</th>
+                                    <th>الإجمالي الصافي النهائي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="pdf-service-desc">صيانة غسيل نفاث 3 مكيفات سبلت + شحن فريون R410A</td>
+                                    <td id="pdf-subtotal-val">450.00 SAR</td>
+                                    <td id="pdf-vat-val">67.50 SAR</td>
+                                    <td class="fw-bold text-success" id="pdf-total-val">517.50 SAR</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="text-end">
-                        <div class="text-muted extra-small">الإجمالي الكلي النهائي</div>
-                        <div class="display-6 fw-extrabold text-success" id="pdf-total-display">517.50 ر.س</div>
+
+                    <!-- Footer ZATCA QR & Totals Block (Clean non-overlapping layout) -->
+                    <div class="row align-items-center p-3 bg-light rounded-3 border g-3">
+                        <div class="col-md-7">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="bg-white p-2 border rounded-3 text-center shadow-sm">
+                                    <i class="bi bi-qr-code fs-1 text-dark"></i>
+                                    <div class="extra-small text-muted" style="font-size: 8px;">ZATCA STAMP</div>
+                                </div>
+                                <div class="extra-small text-muted">
+                                    <div class="fw-bold text-dark">رمز QR مشفر ومشفر إلكترونياً وفق معايير هيئة الزكاة</div>
+                                    <div>Cryptographic Stamp Hash: 4a8e8f90c12e34bd7810fe90aa812f</div>
+                                    <div>UUID: 3f2504e0-4f89-11d3-9a0c-0305e82c3301</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 text-end">
+                            <div class="text-muted extra-small">الإجمالي النهائي المستحق:</div>
+                            <div class="display-6 fw-extrabold text-success" id="pdf-total-display">517.50 SAR</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer bg-light">
+            <div class="modal-footer bg-light no-print">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $isArabic ? 'إغلاق' : 'Close' ?></button>
-                <button type="button" class="btn btn-primary fw-bold" onclick="window.print()"><i class="bi bi-printer me-1"></i> <?= $isArabic ? 'طباعة الفاتورة' : 'Print Invoice' ?></button>
+                <button type="button" class="btn btn-primary fw-bold" onclick="window.print()"><i class="bi bi-printer me-1"></i> <?= $isArabic ? 'طباعة مستند A4' : 'Print A4 PDF' ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2B: Dedicated POS Thermal Receipt 80mm -->
+<div class="modal fade" id="thermalInvoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-dark text-white rounded-top-4 no-print">
+                <h5 class="modal-title fw-bold"><i class="bi bi-receipt me-2 text-warning"></i><?= $isArabic ? 'إيصال حراري POS (80mm Thermal Receipt)' : '80mm POS Thermal Receipt Preview' ?></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3 bg-white printable-area">
+                <div class="thermal-receipt border p-3 rounded-2 bg-white">
+                    <div class="text-center fw-bold fs-6 mb-1"><?= $companyNameAr ?></div>
+                    <div class="text-center extra-small text-muted mb-2"><?= $companyNameEn ?></div>
+                    <div class="text-center extra-small">VAT: <?= $vatNum ?></div>
+                    <div class="text-center extra-small">CR: <?= $crNum ?></div>
+                    <div class="thermal-divider"></div>
+
+                    <div class="d-flex justify-content-between extra-small fw-bold">
+                        <span>Inv: <span id="th-inv-num">INV-2026-00891</span></span>
+                        <span><?= date('Y-m-d H:i') ?></span>
+                    </div>
+                    <div class="extra-small text-muted mb-2">Cust: <span id="th-cust-name">سعد العتيبي</span></div>
+                    <div class="thermal-divider"></div>
+
+                    <div class="d-flex justify-content-between extra-small fw-bold mb-1">
+                        <span>Description</span>
+                        <span>Total</span>
+                    </div>
+                    <div class="d-flex justify-content-between extra-small mb-1">
+                        <span>HVAC Maintenance Service</span>
+                        <span id="th-total-display">517.50 SAR</span>
+                    </div>
+                    <div class="thermal-divider"></div>
+
+                    <div class="d-flex justify-content-between extra-small">
+                        <span>Subtotal Excl VAT:</span>
+                        <span id="th-subtotal">450.00 SAR</span>
+                    </div>
+                    <div class="d-flex justify-content-between extra-small">
+                        <span>VAT (15%):</span>
+                        <span id="th-vat">67.50 SAR</span>
+                    </div>
+                    <div class="d-flex justify-content-between fw-bold text-dark fs-6 mt-1">
+                        <span>NET TOTAL:</span>
+                        <span id="th-net">517.50 SAR</span>
+                    </div>
+
+                    <div class="thermal-divider"></div>
+                    <div class="text-center my-2">
+                        <i class="bi bi-qr-code fs-1 text-dark"></i>
+                        <div class="extra-small text-muted mt-1" style="font-size: 8px;">ZATCA Encrypted TLV Code</div>
+                    </div>
+                    <div class="text-center extra-small text-muted">Thank you for choosing ClimateTech!</div>
+                </div>
+            </div>
+            <div class="modal-footer bg-light no-print">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $isArabic ? 'إغلاق' : 'Close' ?></button>
+                <button type="button" class="btn btn-dark fw-bold" onclick="window.print()"><i class="bi bi-printer me-1"></i> <?= $isArabic ? 'طباعة إيصال حراري' : 'Print Thermal 80mm' ?></button>
             </div>
         </div>
     </div>
@@ -731,7 +898,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
     &lt;cac:AccountingSupplierParty&gt;
         &lt;cac:Party&gt;
             &lt;cac:PartyTaxScheme&gt;
-                &lt;cbc:CompanyID&gt;310488942100003&lt;/cbc:CompanyID&gt;
+                &lt;cbc:CompanyID&gt;<?= $vatNum ?>&lt;/cbc:CompanyID&gt;
             &lt;/cac:PartyTaxScheme&gt;
         &lt;/cac:Party&gt;
     &lt;/cac:AccountingSupplierParty&gt;
@@ -895,11 +1062,12 @@ function submitNewInvoice(e) {
         '<td>' + subtotal.toFixed(2) + ' SAR</td>' +
         '<td>' + vat.toFixed(2) + ' SAR</td>' +
         '<td class="fw-bold text-success">' + net.toFixed(2) + ' SAR</td>' +
-        '<td><span class="badge bg-success-subtle text-success pointer"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>' +
-        '<td>' +
-        '<button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-printer me-1"></i> PDF</button>' +
-        '<button class="btn btn-sm btn-outline-secondary rounded-2" onclick="viewXmlInvoice(\'' + invNum + '\')"><i class="bi bi-file-earmark-code me-1"></i> XML</button>' +
-        '</td>';
+        '<td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + subtotal.toFixed(2) + '\', \'' + vat.toFixed(2) + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>' +
+        '<td><div class="btn-group btn-group-sm">' +
+        '<button class="btn btn-outline-primary" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + subtotal.toFixed(2) + '\', \'' + vat.toFixed(2) + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-file-earmark-pdf me-1"></i> A4 PDF</button>' +
+        '<button class="btn btn-outline-dark" onclick="viewThermalInvoice(\'' + invNum + '\', \'' + name + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-receipt me-1"></i> POS 80mm</button>' +
+        '<button class="btn btn-outline-secondary" onclick="viewXmlInvoice(\'' + invNum + '\')"><i class="bi bi-file-earmark-code"></i> XML</button>' +
+        '</div></td>';
     tbody.prepend(tr);
 
     var modalEl = document.getElementById('newInvoiceModal');
@@ -908,12 +1076,23 @@ function submitNewInvoice(e) {
     alert('ZATCA Tax Invoice ' + invNum + ' generated and encrypted successfully!');
 }
 
-function viewPdfInvoice(num, name, total) {
+function viewPdfInvoice(num, name, subtotal, vat, total) {
     document.getElementById('pdf-inv-num').innerText = num;
     document.getElementById('pdf-cust-name').innerText = name;
+    document.getElementById('pdf-subtotal-val').innerText = subtotal + ' SAR';
+    document.getElementById('pdf-vat-val').innerText = vat + ' SAR';
     document.getElementById('pdf-total-val').innerText = total + ' SAR';
     document.getElementById('pdf-total-display').innerText = total + ' SAR';
     var modal = new bootstrap.Modal(document.getElementById('pdfInvoiceModal'));
+    modal.show();
+}
+
+function viewThermalInvoice(num, name, total) {
+    document.getElementById('th-inv-num').innerText = num;
+    document.getElementById('th-cust-name').innerText = name;
+    document.getElementById('th-total-display').innerText = total + ' SAR';
+    document.getElementById('th-net').innerText = total + ' SAR';
+    var modal = new bootstrap.Modal(document.getElementById('thermalInvoiceModal'));
     modal.show();
 }
 

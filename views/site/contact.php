@@ -93,7 +93,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-lg-5">
                             <div class="h-100 bg-light p-4 rounded-4 border d-flex flex-column justify-content-between">
                                 <div>
-                                    <h4 class="fw-bold text-dark mb-4 pb-2 border-bottom"><i class="bi bi-building me-2 text-primary"></i><?= Yii::t('app', 'ContactDirectInfo') ?></h4>
+                                    <h4 class="fw-bold text-dark mb-3 pb-2 border-bottom">
+                                        <i class="bi bi-building me-2 text-primary"></i>
+                                        <?= $isArabic ? Html::encode($company['name_ar'] ?? '') : Html::encode($company['name_en'] ?? '') ?>
+                                    </h4>
+
+                                    <div class="p-3 bg-white rounded-3 border mb-4 extra-small text-muted">
+                                        <div><i class="bi bi-card-text me-1 text-primary"></i> <strong><?= $isArabic ? 'السجل التجاري (CR):' : 'CR Number:' ?></strong> <?= Html::encode($company['cr_number'] ?? '1010889421') ?></div>
+                                        <div class="mt-1"><i class="bi bi-receipt me-1 text-success"></i> <strong><?= $isArabic ? 'الرقم الضريبي (VAT):' : 'VAT Number:' ?></strong> <?= Html::encode($company['vat_number'] ?? '310488942100003') ?></div>
+                                    </div>
 
                                     <div class="d-flex align-items-start gap-3 mb-4">
                                         <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-3 fs-4">
@@ -101,7 +109,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </div>
                                         <div>
                                             <h6 class="fw-bold text-dark m-0"><?= Yii::t('app', 'ContactAddress') ?></h6>
-                                            <p class="text-muted small m-0">100 HVAC Commerce Way, Suite 400, Riyadh 12214</p>
+                                            <p class="text-muted small m-0">
+                                                <?= Html::encode(($company['building_no'] ?? '7420') . ' ' . ($isArabic ? ($company['street_ar'] ?? '') : ($company['street_en'] ?? '')) . ', ' . ($isArabic ? ($company['district_ar'] ?? '') : ($company['district_en'] ?? '')) . ', ' . ($isArabic ? ($company['city_ar'] ?? '') : ($company['city_en'] ?? ''))) ?>
+                                            </p>
                                         </div>
                                     </div>
 
@@ -111,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </div>
                                         <div>
                                             <h6 class="fw-bold text-dark m-0"><?= Yii::t('app', 'ContactPhone') ?></h6>
-                                            <p class="text-muted small m-0" dir="ltr">(800) 555-4822 / +966 50 000 0000</p>
+                                            <p class="text-muted small m-0" dir="ltr"><?= Html::encode($company['phone'] ?? '(800) 555-4822') ?> / <?= Html::encode($company['whatsapp'] ?? '+966500000000') ?></p>
                                         </div>
                                     </div>
 
@@ -121,7 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </div>
                                         <div>
                                             <h6 class="fw-bold text-dark m-0"><?= Yii::t('app', 'ContactEmailAddr') ?></h6>
-                                            <p class="text-muted small m-0">service@climatetech-hvac.com</p>
+                                            <p class="text-muted small m-0"><?= Html::encode($company['email'] ?? 'hello@dynapulsar.com') ?></p>
                                         </div>
                                     </div>
 
@@ -138,7 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 <div class="p-3 bg-white rounded-3 border text-center">
                                     <div class="extra-small text-muted mb-1"><?= $isArabic ? 'هل تحتاج مساعدة عاجلة؟' : 'Need urgent help?' ?></div>
-                                    <a href="https://wa.me/966500000000" target="_blank" class="btn btn-sm btn-success w-100 rounded-pill fw-bold">
+                                    <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $company['whatsapp'] ?? '966500000000') ?>" target="_blank" class="btn btn-sm btn-success w-100 rounded-pill fw-bold">
                                         <i class="bi bi-whatsapp me-1"></i> <?= $isArabic ? 'محادثة واتساب فورية' : 'Instant WhatsApp Chat' ?>
                                     </a>
                                 </div>

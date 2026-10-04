@@ -202,11 +202,28 @@ class SiteController extends Controller
         }
 
         $leads = array_merge($storedInquiries, $defaultLeads);
+        $company = $this->getCompanySettings();
 
         return $this->render('erp-dashboard', [
             'jobs' => $jobs,
             'leads' => $leads,
+            'company' => $company,
         ]);
+    }
+
+    /**
+     * Action to save bilingual company settings.
+     */
+    public function actionSaveCompanySettings()
+    {
+        $request = Yii::$app->request;
+        if ($request->isPost) {
+            $post = $request->post('Company', []);
+            $file = Yii::getAlias('@runtime/company_settings.json');
+            file_put_contents($file, json_encode($post, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            Yii::$app->session->setFlash('companySaved', true);
+        }
+        return $this->redirect(['/site/erp-dashboard']);
     }
 
     /**
@@ -255,7 +272,43 @@ class SiteController extends Controller
 
         return $this->render('contact', [
             'model' => $model,
+            'company' => $this->getCompanySettings(),
         ]);
+    }
+
+    /**
+     * Fetch stored bilingual company info.
+     */
+    public function getCompanySettings()
+    {
+        $file = Yii::getAlias('@runtime/company_settings.json');
+        if (file_exists($file)) {
+            $data = json_decode(file_get_contents($file), true);
+            if (is_array($data) && !empty($data)) {
+                return $data;
+            }
+        }
+
+        return [
+            'name_ar' => 'شركة كلايميت تك لأنظمة التكييف والكهرباء المحدودة',
+            'name_en' => 'ClimateTech Electrical & HVAC Solutions Co. Ltd.',
+            'cr_number' => '1010889421',
+            'vat_number' => '310488942100003',
+            'permit_number' => 'HVAC-EL-2026-8894',
+            'phone' => '(800) 555-4822',
+            'whatsapp' => '+966500000000',
+            'email' => 'hello@dynapulsar.com',
+            'building_no' => '7420',
+            'street_ar' => 'طريق الملك فهد الفرعي',
+            'street_en' => 'King Fahd Branch Road',
+            'district_ar' => 'حي العليا',
+            'district_en' => 'Al Olaya District',
+            'city_ar' => 'الرياض 12214',
+            'city_en' => 'Riyadh 12214',
+            'additional_no' => '3892',
+            'unit_no_ar' => 'مكتب 402',
+            'unit_no_en' => 'Office 402',
+        ];
     }
 
     /**
