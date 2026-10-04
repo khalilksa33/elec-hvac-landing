@@ -32,5 +32,13 @@ phpunit.phar
 tests/_output/*
 tests/_support/_generated
 
-#vagrant folder
+# vagrant folder
 /.vagrant
+
+# Yii2 specific runtime & assets
+/runtime/*
+!/runtime/.gitignore
+/web/assets/*
+!/web/assets/.gitignore
+/config/db-local.php
+.env

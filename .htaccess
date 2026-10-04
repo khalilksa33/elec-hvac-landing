@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+    RewriteEngine On
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    # Redirect root requests to /web directory for Yii2 Basic apps on Hostinger
+    RewriteCond %{REQUEST_URI} !^/web/
+    RewriteRule ^(.*)$ /web/$1 [L]
+</IfModule>
