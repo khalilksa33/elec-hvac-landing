@@ -27,8 +27,8 @@ jobs:
 
       - name: 📂 Deploy via SFTP to Hostinger (works.dynapulsar.com)
         env:
-          RAW_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
-          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+          RAW_HOST: ${{ secrets.HOSTINGER_SSH_HOST || '145.223.77.119' }}
+          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER || 'u998578075' }}
           SSH_PASSWORD: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
           SSH_PORT: ${{ secrets.HOSTINGER_SSH_PORT || '65002' }}
           REMOTE_PATH: ${{ secrets.HOSTINGER_REMOTE_PATH || '/home/u998578075/domains/dynapulsar.com/public_html/works/' }}
@@ -41,8 +41,8 @@ jobs:
       - name: ⚡ Post-Deployment Remote Commands (Subdomain Permissions & Cache)
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.HOSTINGER_SSH_HOST }}
-          username: ${{ secrets.HOSTINGER_SSH_USER }}
+          host: ${{ secrets.HOSTINGER_SSH_HOST || '145.223.77.119' }}
+          username: ${{ secrets.HOSTINGER_SSH_USER || 'u998578075' }}
           password: ${{ secrets.HOSTINGER_SSH_PASSWORD }}
           port: ${{ secrets.HOSTINGER_SSH_PORT || '65002' }}
           script: |
