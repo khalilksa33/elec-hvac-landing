@@ -29,23 +29,56 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
 
 <style>
 @media print {
-    body * {
-        visibility: hidden !important;
+    html, body {
+        height: auto !important;
+        overflow: visible !important;
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
-    .modal.show .printable-area, .modal.show .printable-area * {
-        visibility: visible !important;
+    #erp-header, #erp-footer, #erpTabs, #erpTabContent, .modal-backdrop, .modal-header, .modal-footer, .no-print, header, footer, nav {
+        display: none !important;
     }
-    .modal.show .printable-area {
+    .modal {
         position: absolute !important;
         left: 0 !important;
         top: 0 !important;
         width: 100% !important;
-        padding: 20px !important;
+        height: auto !important;
+        display: block !important;
+        overflow: visible !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: #fff !important;
+    }
+    .modal-dialog {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .modal-content {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
         margin: 0 !important;
         background: #fff !important;
     }
-    .modal-header, .modal-footer, .btn-close, .no-print {
-        display: none !important;
+    .modal-body {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .printable-area {
+        position: relative !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    @page {
+        size: A4 portrait;
+        margin: 12mm 10mm 12mm 10mm;
     }
 }
 </style>
@@ -778,11 +811,11 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                         <div class="col-md-7">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="bg-white p-2 border rounded-3 text-center shadow-sm">
-                                    <i class="bi bi-qr-code fs-1 text-dark"></i>
-                                    <div class="extra-small text-muted" style="font-size: 8px;">ZATCA STAMP</div>
+                                    <img id="pdf-zatca-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ZATCA-Phase2-Stamp" alt="ZATCA Phase 2 QR Code" style="width: 110px; height: 110px; display: block; margin: 0 auto;">
+                                    <div class="extra-small text-dark fw-bold mt-1" style="font-size: 8px;">ZATCA STAMP</div>
                                 </div>
                                 <div class="extra-small text-muted">
-                                    <div class="fw-bold text-dark">رمز QR مشفر ومشفر إلكترونياً وفق معايير هيئة الزكاة</div>
+                                    <div class="fw-bold text-dark">رمز QR مشفر ومشفر إلكترونياً وفق معايير هيئة الزكاة (Phase 2)</div>
                                     <div>Cryptographic Stamp Hash: 4a8e8f90c12e34bd7810fe90aa812f</div>
                                     <div>UUID: 3f2504e0-4f89-11d3-9a0c-0305e82c3301</div>
                                 </div>
@@ -1008,6 +1041,10 @@ function viewPdfInvoice(num, name, subtotal, vat, total) {
     document.getElementById('pdf-vat-val').innerText = vat + ' SAR';
     document.getElementById('pdf-total-val').innerText = total + ' SAR';
     document.getElementById('pdf-total-display').innerText = total + ' SAR';
+
+    var qrContent = 'ZATCA|Seller:<?= urlencode($companyNameEn) ?>|VAT:<?= $vatNum ?>|Inv:' + num + '|Total:' + total + '|VAT:' + vat;
+    document.getElementById('pdf-zatca-qr-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(qrContent);
+
     var modal = new bootstrap.Modal(document.getElementById('pdfInvoiceModal'));
     modal.show();
 }
