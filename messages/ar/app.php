@@ -111,9 +111,20 @@ return [
     'InventoryTracking' => 'متابعة المخزون 100%',
     'LaunchERP' => 'فتح لوحة التحكم (ERP)',
 
-    // Footer
-    'FooterAbout' => 'حلول تكييف وكهرباء منزلية معتمدة ومُرخصة. أفضل خدمات التركيب والصيانة والإصلاح لمكيفات السبلت والدولابي والكاسيت والمركزي.',
-    'LicensedTechs' => 'فنيون مُرخصون',
-    'Emergency247' => 'خدمة طوارئ 24/7',
-    'CopyrightText' => 'جميع الحقوق محفوظة شركة كلايميت تك لأنظمة التكييف والكهرباء.',
+    // Contact Us Page
+    'ContactTitle' => 'تواصل معنا',
+    'ContactSubtitle' => 'إذا كان لديك أي استفسار أو ترغب في طلب خدمة صيانة أو معاينة، يسعدنا تواصلك معنا.',
+    'ContactSuccessMsg' => 'شكراً لتواصلك معنا. سيتصل بك فريقنا في أقرب وقت ممكن.',
+    'ContactName' => 'الاسم',
+    'ContactEmail' => 'البريد الإلكتروني',
+    'ContactSubject' => 'موضوع الرسالة',
+    'ContactBody' => 'نص الرسالة / الاستفسار',
+    'ContactVerification' => 'رمز التحقق',
+    'ContactSubmit' => 'إرسال الرسالة',
+    'ContactDirectInfo' => 'معلومات الاتصال المباشر',
+    'ContactAddress' => 'العنوان الرئيسي',
+    'ContactPhone' => 'هاتف الخدمة 24/7',
+    'ContactEmailAddr' => 'البريد الإلكتروني',
+    'ContactWorkHours' => 'أوقات العمل',
+    'ContactWorkHoursVal' => 'طوارئ 24 ساعة / 7 أيام في الأسبوع',
 ];
