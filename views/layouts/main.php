@@ -139,6 +139,18 @@ $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font
     </div>
 </footer>
 
+<!-- Floating WhatsApp & Call Quick Action Widgets -->
+<div class="floating-widget-container">
+    <a href="https://wa.me/966500000000?text=مرحباً،%20أحتاج%20إلى%20خدمة%20صيانة/تركيب%20تكييف" target="_blank" class="floating-btn floating-whatsapp" aria-label="WhatsApp Us">
+        <i class="bi bi-whatsapp"></i>
+        <span class="floating-tooltip"><?= $isArabic ? 'واتساب مباشر' : 'WhatsApp Us' ?></span>
+    </a>
+    <a href="tel:8005554822" class="floating-btn floating-call" aria-label="Call Direct">
+        <i class="bi bi-telephone-fill"></i>
+        <span class="floating-tooltip"><?= $isArabic ? 'اتصال مباشر' : 'Call Direct' ?></span>
+    </a>
+</div>
+
 <?php $this->endBody() ?>
 </body>
 </html>

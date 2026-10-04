@@ -216,3 +216,81 @@ main > .container-fluid {
 .footer a:hover {
     color: var(--accent-orange);
 }
+
+/* Floating Action Floating Widgets (WhatsApp & Calling) */
+.floating-widget-container {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+body[dir="rtl"] .floating-widget-container {
+    left: auto;
+    right: 25px;
+}
+
+.floating-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.8rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none !important;
+    position: relative;
+}
+
+.floating-btn:hover {
+    transform: scale(1.12);
+    color: #fff;
+}
+
+.floating-whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+}
+
+.floating-call {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+}
+
+.floating-tooltip {
+    position: absolute;
+    white-space: nowrap;
+    background: #0f172a;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+body[dir="ltr"] .floating-tooltip {
+    left: 70px;
+    transform: translateX(-10px);
+}
+
+body[dir="rtl"] .floating-tooltip {
+    right: 70px;
+    transform: translateX(10px);
+}
+
+.floating-btn:hover .floating-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.footer a:hover {
+    color: var(--accent-orange);
+}
