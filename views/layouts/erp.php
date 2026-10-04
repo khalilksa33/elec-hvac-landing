@@ -10,6 +10,7 @@ use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
 AppAsset::register($this);
+\yii\bootstrap5\BootstrapPluginAsset::register($this);
 
 $isArabic = strpos(Yii::$app->language, 'ar') === 0;
 $dir = $isArabic ? 'rtl' : 'ltr';
@@ -23,6 +24,7 @@ if ($isArabic) {
     $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css');
 }
 $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', ['position' => \yii\web\View::POS_END]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

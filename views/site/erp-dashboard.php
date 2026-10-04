@@ -574,3 +574,25 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
 
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var tabButtons = document.querySelectorAll('#erpTabs button[data-bs-toggle="tab"]');
+    tabButtons.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            tabButtons.forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            var targetSelector = this.getAttribute('data-bs-target');
+            var tabPanes = document.querySelectorAll('#erpTabContent .tab-pane');
+            tabPanes.forEach(function(pane) {
+                pane.classList.remove('show', 'active');
+            });
+            var targetPane = document.querySelector(targetSelector);
+            if (targetPane) {
+                targetPane.classList.add('show', 'active');
+            }
+        });
+    });
+});
+</script>
