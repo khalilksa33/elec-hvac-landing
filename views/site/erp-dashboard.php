@@ -27,7 +27,10 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
     <!-- Navigation Tabs for Modules -->
     <ul class="nav nav-pills mb-4 gap-2 bg-white p-2 rounded-4 border shadow-sm" id="erpTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-bold rounded-3" id="dispatch-tab" data-bs-toggle="tab" data-bs-target="#dispatch" type="button" role="tab"><i class="bi bi-speedometer2 me-2"></i>التوزيع والمربط الميداني</button>
+            <button class="nav-link active fw-bold rounded-3" id="superadmin-tab" data-bs-toggle="tab" data-bs-target="#superadmin" type="button" role="tab"><i class="bi bi-shield-lock-fill text-danger me-2"></i>لوحة التحكم العليا (SuperAdmin Console)</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link fw-bold rounded-3" id="dispatch-tab" data-bs-toggle="tab" data-bs-target="#dispatch" type="button" role="tab"><i class="bi bi-speedometer2 me-2"></i>التوزيع والمربط الميداني</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link fw-bold rounded-3" id="zatca-tab" data-bs-toggle="tab" data-bs-target="#zatca" type="button" role="tab"><i class="bi bi-qr-code-scan me-2"></i>الفواتير الإلكترونية (ZATCA)</button>
@@ -45,8 +48,117 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
 
     <div class="tab-content" id="erpTabContent">
 
+        <!-- TAB 0: SuperAdmin Executive Command Center -->
+        <div class="tab-pane fade show active" id="superadmin" role="tabpanel">
+            <!-- Executive Metrics -->
+            <div class="row g-4 mb-4">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-lg rounded-4 bg-dark text-white p-4 position-relative overflow-hidden">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-white-50 extra-small fw-bold text-uppercase">إجمالي الإيرادات الشهرية</div>
+                                <div class="display-6 fw-extrabold text-warning">148,950 ر.س</div>
+                                <div class="text-success extra-small"><i class="bi bi-arrow-up-right me-1"></i> +32.4% زيادة سنوية</div>
+                            </div>
+                            <div class="p-3 bg-warning bg-opacity-20 text-warning rounded-4 fs-2">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-lg rounded-4 bg-primary text-white p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-white-50 extra-small fw-bold text-uppercase">معدل تحويل إعلانات جوجل</div>
+                                <div class="display-6 fw-extrabold text-white">14.8%</div>
+                                <div class="text-white-50 extra-small"><i class="bi bi-bullseye me-1"></i> 240 زيارة / 35 طلب</div>
+                            </div>
+                            <div class="p-3 bg-white bg-opacity-20 text-white rounded-4 fs-2">
+                                <i class="bi bi-google"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-lg rounded-4 bg-success text-white p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-white-50 extra-small fw-bold text-uppercase">حالة مطابقة ZATCA هيئة الزكاة</div>
+                                <div class="display-6 fw-extrabold text-white">100%</div>
+                                <div class="text-white-50 extra-small"><i class="bi bi-check-all me-1"></i> Phase 2 Active</div>
+                            </div>
+                            <div class="p-3 bg-white bg-opacity-20 text-white rounded-4 fs-2">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-0 shadow-lg rounded-4 bg-dark text-white p-4 border border-secondary">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-white-50 extra-small fw-bold text-uppercase">الفنيين الميدانيين النشطين</div>
+                                <div class="display-6 fw-extrabold text-info">16 فني</div>
+                                <div class="text-info extra-small"><i class="bi bi-geo-fill me-1"></i> GPS Live Track</div>
+                            </div>
+                            <div class="p-3 bg-info bg-opacity-20 text-info rounded-4 fs-2">
+                                <i class="bi bi-person-workspace"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Executive Quick Controls & System Health -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                            <h5 class="fw-bold text-dark m-0"><i class="bi bi-sliders text-danger me-2"></i>تحكم النظام والتنبيهات المباشرة (System Control)</h5>
+                            <span class="badge bg-danger">SuperAdmin Mode</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold text-dark">حالة الربط المباشر مع ZATCA</span>
+                                        <span class="badge bg-success">Online</span>
+                                    </div>
+                                    <p class="text-muted extra-small m-0">تأكيد اتصال الخادم بشبكة هيئة الزكاة والضريبة والجمارك لتوليد رمز QR مشفر لحظياً.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="fw-bold text-dark">مربط إعلانات جوجل Conversion Pixel</span>
+                                        <span class="badge bg-primary">Active</span>
+                                    </div>
+                                    <p class="text-muted extra-small m-0">يتم إرسال أحداث التحويل (Form Submit & Phone Call) فوراً إلى حساب Google Ads.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>إجراءات الإدارة السريعة</h5>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-danger fw-bold rounded-3 text-start" onclick="alert('توليد تقرير المبيعات الضريبي الشامل ZATCA');"><i class="bi bi-file-earmark-pdf me-2"></i>تصدير التقرير الضريبي النهائي</button>
+                            <button class="btn btn-outline-primary fw-bold rounded-3 text-start" onclick="alert('جار تنظيف وتفريغ الذاكرة المؤقتة Cache');"><i class="bi bi-arrow-repeat me-2"></i>تحديث وتفريغ الذاكرة (Flush Cache)</button>
+                            <button class="btn btn-outline-dark fw-bold rounded-3 text-start" onclick="alert('نسخ احتياطي لقاعدة البيانات والسجلات');"><i class="bi bi-database-check me-2"></i>إنشاء نسخة احتياطية للبيانات (Backup)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- TAB 1: Dispatch & Live Console -->
-        <div class="tab-pane fade show active" id="dispatch" role="tabpanel">
+        <div class="tab-pane fade" id="dispatch" role="tabpanel">
             <!-- Stat Cards -->
             <div class="row g-3 mb-4">
                 <div class="col-xl-3 col-md-6">
