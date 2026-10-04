@@ -15,34 +15,50 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                 <span class="badge bg-primary fs-6"><i class="bi bi-cpu-fill me-1"></i> Enterprise ERP v3.0</span>
                 <span class="badge bg-success"><i class="bi bi-shield-check me-1"></i> ZATCA Phase 2 E-Invoicing Compliant</span>
             </div>
-            <h2 class="fw-extrabold text-dark mt-2 mb-0">لوحة تحكم إدارة أنظمة التكييف والكهرباء والفوترة الإلكترونية</h2>
-            <p class="text-muted small m-0">إدارة الشركة، الفواتير الضريبية (ZATCA)، العملاء، الفنيين، الصلاحيات، وإعدادات الرقم التجاري والعنوان الوطني.</p>
+            <h2 class="fw-extrabold text-dark mt-2 mb-0">
+                <?= $isArabic ? 'لوحة تحكم إدارة أنظمة التكييف والكهرباء والفوترة الإلكترونية' : 'HVAC & Electrical Operations & E-Invoicing ERP Portal' ?>
+            </h2>
+            <p class="text-muted small m-0">
+                <?= $isArabic ? 'إدارة الشركة، الفواتير الضريبية (ZATCA)، العملاء، الفنيين، الصلاحيات، وإعدادات الرقم التجاري والعنوان الوطني.' : 'Manage company settings, ZATCA e-invoices, customer records, field technicians, permissions, and National Address.' ?>
+            </p>
         </div>
         <div class="d-flex gap-2 mt-3 mt-md-0">
-            <button class="btn btn-outline-secondary rounded-3" onclick="location.reload();"><i class="bi bi-arrow-clockwise me-1"></i> تحديث البيانات</button>
-            <a href="<?= Url::to(['/site/index']) ?>" class="btn btn-accent text-white rounded-3"><i class="bi bi-globe me-1"></i> عرض الموقع المباشر</a>
+            <button class="btn btn-outline-secondary rounded-3" onclick="location.reload();"><i class="bi bi-arrow-clockwise me-1"></i> <?= $isArabic ? 'تحديث البيانات' : 'Refresh Data' ?></button>
+            <a href="<?= Url::to(['/site/index']) ?>" class="btn btn-accent text-white rounded-3"><i class="bi bi-globe me-1"></i> <?= $isArabic ? 'عرض الموقع المباشر' : 'View Live Website' ?></a>
         </div>
     </div>
 
     <!-- Navigation Tabs for Modules -->
     <ul class="nav nav-pills mb-4 gap-2 bg-white p-2 rounded-4 border shadow-sm" id="erpTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-bold rounded-3" id="superadmin-tab" data-bs-toggle="tab" data-bs-target="#superadmin" type="button" role="tab"><i class="bi bi-shield-lock-fill text-danger me-2"></i>لوحة التحكم العليا (SuperAdmin Console)</button>
+            <button class="nav-link active fw-bold rounded-3" id="superadmin-tab" data-bs-toggle="tab" data-bs-target="#superadmin" type="button" role="tab">
+                <i class="bi bi-shield-lock-fill text-danger me-2"></i><?= $isArabic ? 'لوحة التحكم العليا (SuperAdmin Console)' : 'SuperAdmin Executive Console' ?>
+            </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold rounded-3" id="dispatch-tab" data-bs-toggle="tab" data-bs-target="#dispatch" type="button" role="tab"><i class="bi bi-speedometer2 me-2"></i>التوزيع والمربط الميداني</button>
+            <button class="nav-link fw-bold rounded-3" id="dispatch-tab" data-bs-toggle="tab" data-bs-target="#dispatch" type="button" role="tab">
+                <i class="bi bi-speedometer2 me-2"></i><?= $isArabic ? 'التوزيع والمربط الميداني' : 'Field Technician Dispatch' ?>
+            </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold rounded-3" id="zatca-tab" data-bs-toggle="tab" data-bs-target="#zatca" type="button" role="tab"><i class="bi bi-qr-code-scan me-2"></i>الفواتير الإلكترونية (ZATCA)</button>
+            <button class="nav-link fw-bold rounded-3" id="zatca-tab" data-bs-toggle="tab" data-bs-target="#zatca" type="button" role="tab">
+                <i class="bi bi-qr-code-scan me-2"></i><?= $isArabic ? 'الفواتير الإلكترونية (ZATCA)' : 'ZATCA E-Invoicing' ?>
+            </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold rounded-3" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers" type="button" role="tab"><i class="bi bi-people-fill me-2"></i>سجلات العملاء والخدمات</button>
+            <button class="nav-link fw-bold rounded-3" id="customers-tab" data-bs-toggle="tab" data-bs-target="#customers" type="button" role="tab">
+                <i class="bi bi-people-fill me-2"></i><?= $isArabic ? 'سجلات العملاء والخدمات' : 'Customer Records & Addresses' ?>
+            </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold rounded-3" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab"><i class="bi bi-person-badge-fill me-2"></i>المستخدمون والصلاحيات (RBAC)</button>
+            <button class="nav-link fw-bold rounded-3" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">
+                <i class="bi bi-person-badge-fill me-2"></i><?= $isArabic ? 'المستخدمون والصلاحيات (RBAC)' : 'Users & Permissions (RBAC)' ?>
+            </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link fw-bold rounded-3" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab"><i class="bi bi-gear-wide-connected me-2"></i>إعدادات الشركة والرقم الضريبي</button>
+            <button class="nav-link fw-bold rounded-3" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab">
+                <i class="bi bi-gear-wide-connected me-2"></i><?= $isArabic ? 'إعدادات الشركة والرقم الضريبي' : 'Company & Tax Settings' ?>
+            </button>
         </li>
     </ul>
 
