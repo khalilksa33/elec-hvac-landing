@@ -48,16 +48,6 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
         display: none !important;
     }
 }
-.thermal-receipt {
-    width: 300px;
-    margin: 0 auto;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 12px;
-}
-.thermal-divider {
-    border-top: 1px dashed #000;
-    margin: 8px 0;
-}
 </style>
 
 <div class="container-fluid py-4 px-4 bg-light min-vh-100">
@@ -394,13 +384,13 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
             </div>
         </div>
 
-        <!-- TAB 2: ZATCA E-Invoices -->
+        <!-- TAB 2: ZATCA E-Invoices (A4 Tax Invoice Only) -->
         <div class="tab-pane fade" id="zatca" role="tabpanel">
             <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                     <div>
                         <h4 class="fw-bold text-dark m-0"><i class="bi bi-qr-code text-success me-2"></i><?= $isArabic ? 'الفواتير الضريبية المبسطة والإلكترونية (ZATCA Compliant)' : 'ZATCA Phase 2 E-Invoices & Tax Receipts' ?></h4>
-                        <p class="text-muted small mb-0"><?= $isArabic ? 'إصدار فواتير متوافقة مع المرحلة الثانية لهيئة الزكاة والضريبة والجمارك (توليد رمز QR مشفر وصيغة XML/PDF).' : 'Issue phase-2 compliant tax e-invoices with cryptographic QR & XML/PDF generation.' ?></p>
+                        <p class="text-muted small mb-0"><?= $isArabic ? 'إصدار فواتير متوافقة مع المرحلة الثانية لهيئة الزكاة والضريبة والجمارك (توليد رمز QR مشفر وصيغة XML/PDF القياسية).' : 'Issue phase-2 compliant tax e-invoices with cryptographic QR & standard A4 PDF/XML generation.' ?></p>
                     </div>
                     <button class="btn btn-success rounded-3 fw-bold" onclick="openNewInvoiceModal();"><i class="bi bi-plus-lg me-1"></i> <?= $isArabic ? 'إصدار فاتورة ضريبية جديدة' : 'Create Tax Invoice' ?></button>
                 </div>
@@ -416,7 +406,7 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                                 <th><?= $isArabic ? 'ضريبة القيمة المضافة (15%)' : 'VAT Amount (15%)' ?></th>
                                 <th><?= $isArabic ? 'الإجمالي الصافي' : 'Total Net' ?></th>
                                 <th><?= $isArabic ? 'رمز QR وشفرة ZATCA' : 'ZATCA QR Code' ?></th>
-                                <th><?= $isArabic ? 'معاينة وطباعة' : 'Print Actions' ?></th>
+                                <th><?= $isArabic ? 'طباعة ومعاينة A4' : 'A4 Print & Export' ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -430,8 +420,7 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                                 <td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '450.00', '67.50', '517.50')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '450.00', '67.50', '517.50')"><i class="bi bi-file-earmark-pdf me-1"></i> A4 PDF</button>
-                                        <button class="btn btn-outline-dark" onclick="viewThermalInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '517.50')"><i class="bi bi-receipt me-1"></i> POS 80mm</button>
+                                        <button class="btn btn-outline-primary fw-bold" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '450.00', '67.50', '517.50')"><i class="bi bi-printer me-1"></i> <?= $isArabic ? 'فاتورة A4 PDF' : 'A4 Tax Invoice' ?></button>
                                         <button class="btn btn-outline-secondary" onclick="viewXmlInvoice('INV-2026-00891')"><i class="bi bi-file-earmark-code"></i> XML</button>
                                     </div>
                                 </td>
@@ -446,8 +435,7 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                                 <td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '11,200.00', '1,680.00', '12,880.00')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-outline-primary" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '11,200.00', '1,680.00', '12,880.00')"><i class="bi bi-file-earmark-pdf me-1"></i> A4 PDF</button>
-                                        <button class="btn btn-outline-dark" onclick="viewThermalInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '12,880.00')"><i class="bi bi-receipt me-1"></i> POS 80mm</button>
+                                        <button class="btn btn-outline-primary fw-bold" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '11,200.00', '1,680.00', '12,880.00')"><i class="bi bi-printer me-1"></i> <?= $isArabic ? 'فاتورة A4 PDF' : 'A4 Tax Invoice' ?></button>
                                         <button class="btn btn-outline-secondary" onclick="viewXmlInvoice('INV-2026-00892')"><i class="bi bi-file-earmark-code"></i> XML</button>
                                     </div>
                                 </td>
@@ -719,7 +707,7 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
     </div>
 </div>
 
-<!-- Modal 2: Standard A4 ZATCA PDF Print Invoice (No Overlapping Elements) -->
+<!-- Modal 2: Standard A4 ZATCA PDF Print Invoice (Clean A4 Print Format Only) -->
 <div class="modal fade" id="pdfInvoiceModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg rounded-4">
@@ -810,68 +798,6 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
             <div class="modal-footer bg-light no-print">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $isArabic ? 'إغلاق' : 'Close' ?></button>
                 <button type="button" class="btn btn-primary fw-bold" onclick="window.print()"><i class="bi bi-printer me-1"></i> <?= $isArabic ? 'طباعة مستند A4' : 'Print A4 PDF' ?></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal 2B: Dedicated POS Thermal Receipt 80mm -->
-<div class="modal fade" id="thermalInvoiceModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header bg-dark text-white rounded-top-4 no-print">
-                <h5 class="modal-title fw-bold"><i class="bi bi-receipt me-2 text-warning"></i><?= $isArabic ? 'إيصال حراري POS (80mm Thermal Receipt)' : '80mm POS Thermal Receipt Preview' ?></h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-3 bg-white printable-area">
-                <div class="thermal-receipt border p-3 rounded-2 bg-white">
-                    <div class="text-center fw-bold fs-6 mb-1"><?= $companyNameAr ?></div>
-                    <div class="text-center extra-small text-muted mb-2"><?= $companyNameEn ?></div>
-                    <div class="text-center extra-small">VAT: <?= $vatNum ?></div>
-                    <div class="text-center extra-small">CR: <?= $crNum ?></div>
-                    <div class="thermal-divider"></div>
-
-                    <div class="d-flex justify-content-between extra-small fw-bold">
-                        <span>Inv: <span id="th-inv-num">INV-2026-00891</span></span>
-                        <span><?= date('Y-m-d H:i') ?></span>
-                    </div>
-                    <div class="extra-small text-muted mb-2">Cust: <span id="th-cust-name">سعد العتيبي</span></div>
-                    <div class="thermal-divider"></div>
-
-                    <div class="d-flex justify-content-between extra-small fw-bold mb-1">
-                        <span>Description</span>
-                        <span>Total</span>
-                    </div>
-                    <div class="d-flex justify-content-between extra-small mb-1">
-                        <span>HVAC Maintenance Service</span>
-                        <span id="th-total-display">517.50 SAR</span>
-                    </div>
-                    <div class="thermal-divider"></div>
-
-                    <div class="d-flex justify-content-between extra-small">
-                        <span>Subtotal Excl VAT:</span>
-                        <span id="th-subtotal">450.00 SAR</span>
-                    </div>
-                    <div class="d-flex justify-content-between extra-small">
-                        <span>VAT (15%):</span>
-                        <span id="th-vat">67.50 SAR</span>
-                    </div>
-                    <div class="d-flex justify-content-between fw-bold text-dark fs-6 mt-1">
-                        <span>NET TOTAL:</span>
-                        <span id="th-net">517.50 SAR</span>
-                    </div>
-
-                    <div class="thermal-divider"></div>
-                    <div class="text-center my-2">
-                        <i class="bi bi-qr-code fs-1 text-dark"></i>
-                        <div class="extra-small text-muted mt-1" style="font-size: 8px;">ZATCA Encrypted TLV Code</div>
-                    </div>
-                    <div class="text-center extra-small text-muted">Thank you for choosing ClimateTech!</div>
-                </div>
-            </div>
-            <div class="modal-footer bg-light no-print">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $isArabic ? 'إغلاق' : 'Close' ?></button>
-                <button type="button" class="btn btn-dark fw-bold" onclick="window.print()"><i class="bi bi-printer me-1"></i> <?= $isArabic ? 'طباعة إيصال حراري' : 'Print Thermal 80mm' ?></button>
             </div>
         </div>
     </div>
@@ -1064,8 +990,7 @@ function submitNewInvoice(e) {
         '<td class="fw-bold text-success">' + net.toFixed(2) + ' SAR</td>' +
         '<td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + subtotal.toFixed(2) + '\', \'' + vat.toFixed(2) + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>' +
         '<td><div class="btn-group btn-group-sm">' +
-        '<button class="btn btn-outline-primary" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + subtotal.toFixed(2) + '\', \'' + vat.toFixed(2) + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-file-earmark-pdf me-1"></i> A4 PDF</button>' +
-        '<button class="btn btn-outline-dark" onclick="viewThermalInvoice(\'' + invNum + '\', \'' + name + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-receipt me-1"></i> POS 80mm</button>' +
+        '<button class="btn btn-outline-primary fw-bold" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + subtotal.toFixed(2) + '\', \'' + vat.toFixed(2) + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-printer me-1"></i> A4 Tax Invoice</button>' +
         '<button class="btn btn-outline-secondary" onclick="viewXmlInvoice(\'' + invNum + '\')"><i class="bi bi-file-earmark-code"></i> XML</button>' +
         '</div></td>';
     tbody.prepend(tr);
@@ -1084,15 +1009,6 @@ function viewPdfInvoice(num, name, subtotal, vat, total) {
     document.getElementById('pdf-total-val').innerText = total + ' SAR';
     document.getElementById('pdf-total-display').innerText = total + ' SAR';
     var modal = new bootstrap.Modal(document.getElementById('pdfInvoiceModal'));
-    modal.show();
-}
-
-function viewThermalInvoice(num, name, total) {
-    document.getElementById('th-inv-num').innerText = num;
-    document.getElementById('th-cust-name').innerText = name;
-    document.getElementById('th-total-display').innerText = total + ' SAR';
-    document.getElementById('th-net').innerText = total + ' SAR';
-    var modal = new bootstrap.Modal(document.getElementById('thermalInvoiceModal'));
     modal.show();
 }
 
