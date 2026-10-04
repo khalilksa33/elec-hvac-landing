@@ -133,7 +133,7 @@ $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font
                 &copy; <?= date('Y') ?> <?= Yii::t('app', 'CopyrightText') ?>
             </div>
             <div class="col-md-6 text-center text-md-end text-secondary small">
-                Google Ads Compliant Landing Page & Built-in Yii2 ERP Backend
+                Google Ads Compliant Landing Page & Built-in Enterprise ERP Engine
             </div>
         </div>
     </div>

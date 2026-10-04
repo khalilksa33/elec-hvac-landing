@@ -328,15 +328,15 @@ $this->title = Yii::t('app', 'SystemsTitle');
     </div>
 </section>
 
-<!-- Integrated Yii2 ERP System Showcase -->
+<!-- Integrated Enterprise ERP System Showcase -->
 <section class="py-5 bg-dark text-white position-relative">
     <div class="container">
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
                 <span class="badge bg-info text-dark fw-bold px-3 py-2 rounded-pill mb-2">Integrated Tech ERP Engine</span>
-                <h2 class="display-5 fw-extrabold text-white">Powered by Yii2 ERP Management System</h2>
+                <h2 class="display-5 fw-extrabold text-white">Powered by Enterprise ERP Management System</h2>
                 <p class="text-secondary fs-5">
-                    Our proprietary Yii2 ERP backend links website customer leads directly to field technicians, job cards, inventory spare parts, and automated invoicing.
+                    Our proprietary ERP backend links website customer leads directly to field technicians, job cards, inventory spare parts, and automated invoicing.
                 </p>
 
                 <div class="row g-3 my-4">
@@ -356,7 +356,7 @@ $this->title = Yii::t('app', 'SystemsTitle');
 
                 <div class="d-flex gap-3">
                     <a href="<?= Url::to(['/site/erp-dashboard']) ?>" class="btn btn-info btn-lg fw-bold text-dark rounded-3">
-                        <i class="bi bi-speedometer2 me-2"></i> Launch Yii2 ERP Portal
+                        <i class="bi bi-speedometer2 me-2"></i> Launch ERP Portal
                     </a>
                 </div>
             </div>
@@ -364,7 +364,7 @@ $this->title = Yii::t('app', 'SystemsTitle');
             <div class="col-lg-6">
                 <div class="erp-preview-box border border-secondary shadow-lg">
                     <div class="d-flex justify-content-between align-items-center pb-3 mb-3 border-bottom border-secondary">
-                        <div class="fw-bold text-info"><i class="bi bi-pc-display me-2"></i>Yii2 ERP Dispatch Live Console</div>
+                        <div class="fw-bold text-info"><i class="bi bi-pc-display me-2"></i>ERP Dispatch Live Console</div>
                         <span class="badge bg-success">System Active</span>
                     </div>
 

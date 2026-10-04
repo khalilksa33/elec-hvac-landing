@@ -12,7 +12,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 bg-white p-4 rounded-4 shadow-sm border">
         <div>
             <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-primary fs-6"><i class="bi bi-cpu-fill me-1"></i> Yii2 Enterprise ERP v3.0</span>
+                <span class="badge bg-primary fs-6"><i class="bi bi-cpu-fill me-1"></i> Enterprise ERP v3.0</span>
                 <span class="badge bg-success"><i class="bi bi-shield-check me-1"></i> ZATCA Phase 2 E-Invoicing Compliant</span>
             </div>
             <h2 class="fw-extrabold text-dark mt-2 mb-0">لوحة تحكم إدارة أنظمة التكييف والكهرباء والفوترة الإلكترونية</h2>
