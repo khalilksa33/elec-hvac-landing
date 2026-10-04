@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'adminEmail' => 'hello@dynapulsar.com',
+    'senderEmail' => 'hello@dynapulsar.com',
+    'senderName' => 'ClimateTech HVAC Enterprise Systems',
 ];

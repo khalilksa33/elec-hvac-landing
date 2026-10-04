@@ -73,7 +73,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <div class="text-white-50 extra-small fw-bold text-uppercase"><?= $isArabic ? 'إجمالي الإيرادات الشهرية' : 'Total Monthly Revenue' ?></div>
-                                <div class="display-6 fw-extrabold text-warning">148,950 <?= $isArabic ? 'ر.س' : 'SAR' ?></div>
+                                <div class="display-6 fw-extrabold text-warning" id="total-revenue-metric">148,950 <?= $isArabic ? 'ر.س' : 'SAR' ?></div>
                                 <div class="text-success extra-small"><i class="bi bi-arrow-up-right me-1"></i> <?= $isArabic ? '+32.4% زيادة سنوية' : '+32.4% YoY Growth' ?></div>
                             </div>
                             <div class="p-3 bg-warning bg-opacity-20 text-warning rounded-4 fs-2">
@@ -129,33 +129,43 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                 </div>
             </div>
 
-            <!-- Executive Quick Controls & System Health -->
+            <!-- Executive Quick Controls & Live Inquiries -->
             <div class="row g-4 mb-4">
                 <div class="col-lg-8">
                     <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
                         <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
-                            <h5 class="fw-bold text-dark m-0"><i class="bi bi-sliders text-danger me-2"></i><?= $isArabic ? 'تحكم النظام والتنبيهات المباشرة (System Control)' : 'System Control & Live Signals' ?></h5>
-                            <span class="badge bg-danger">SuperAdmin Mode</span>
+                            <h5 class="fw-bold text-dark m-0"><i class="bi bi-envelope-open-fill text-primary me-2"></i><?= $isArabic ? 'استفسارات ومطلوبات العملاء الجدد (Direct Inquiries)' : 'Live Customer Inquiries & Email Sync' ?></h5>
+                            <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Sync: hello@dynapulsar.com</span>
                         </div>
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="p-3 bg-light rounded-3 border">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span class="fw-bold text-dark"><?= $isArabic ? 'حالة الربط المباشر مع ZATCA' : 'ZATCA Direct API Connection' ?></span>
-                                        <span class="badge bg-success">Online</span>
-                                    </div>
-                                    <p class="text-muted extra-small m-0"><?= $isArabic ? 'تأكيد اتصال الخادم بشبكة هيئة الزكاة والضريبة والجمارك لتوليد رمز QR مشفر لحظياً.' : 'Server connection verified with ZATCA network for instant encrypted QR generation.' ?></p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3 bg-light rounded-3 border">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span class="fw-bold text-dark"><?= $isArabic ? 'مربط إعلانات جوجل Conversion Pixel' : 'Google Ads Conversion Pixel' ?></span>
-                                        <span class="badge bg-primary">Active</span>
-                                    </div>
-                                    <p class="text-muted extra-small m-0"><?= $isArabic ? 'يتم إرسال أحداث التحويل (Form Submit & Phone Call) فوراً إلى حساب Google Ads.' : 'Conversion events (Form Submit & Calls) synced directly to Google Ads.' ?></p>
-                                </div>
-                            </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th><?= $isArabic ? 'العميل' : 'Customer' ?></th>
+                                        <th><?= $isArabic ? 'الجوال' : 'Phone' ?></th>
+                                        <th><?= $isArabic ? 'الخدمة المطلوب' : 'Service Requested' ?></th>
+                                        <th><?= $isArabic ? 'المنطقة' : 'Location' ?></th>
+                                        <th><?= $isArabic ? 'الوقت' : 'Time' ?></th>
+                                        <th><?= $isArabic ? 'الإجراء' : 'Action' ?></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($leads as $index => $lead): ?>
+                                        <tr>
+                                            <td><strong><?= Html::encode($lead['name']) ?></strong></td>
+                                            <td class="text-primary fw-bold"><?= Html::encode($lead['phone']) ?></td>
+                                            <td><span class="badge bg-info-subtle text-info border"><?= Html::encode($lead['unit']) ?></span></td>
+                                            <td><small><?= Html::encode($lead['location']) ?></small></td>
+                                            <td><span class="badge bg-light text-muted border"><?= Html::encode($lead['time']) ?></span></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-success rounded-pill px-3" onclick="openAssignTechModal('<?= Html::encode(addslashes($lead['name'])) ?>', '<?= Html::encode(addslashes($lead['unit'])) ?>')">
+                                                    <i class="bi bi-plus-circle me-1"></i> <?= $isArabic ? 'تعيين فني' : 'Assign Tech' ?>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -164,9 +174,9 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                     <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
                         <h5 class="fw-bold text-dark mb-3"><i class="bi bi-lightning-charge-fill text-warning me-2"></i><?= $isArabic ? 'إجراءات الإدارة السريعة' : 'Executive Quick Actions' ?></h5>
                         <div class="d-grid gap-2">
-                            <button class="btn btn-outline-danger fw-bold rounded-3 text-start" onclick="alert('<?= $isArabic ? 'تصدير التقرير الضريبي النهائي' : 'Exporting ZATCA Tax Report' ?>');"><i class="bi bi-file-earmark-pdf me-2"></i><?= $isArabic ? 'تصدير التقرير الضريبي النهائي' : 'Export ZATCA Tax Report' ?></button>
-                            <button class="btn btn-outline-primary fw-bold rounded-3 text-start" onclick="alert('<?= $isArabic ? 'تحديث وتفريغ الذاكرة' : 'Flushing application cache' ?>');"><i class="bi bi-arrow-repeat me-2"></i><?= $isArabic ? 'تحديث وتفريغ الذاكرة (Flush Cache)' : 'Flush App Cache' ?></button>
-                            <button class="btn btn-outline-dark fw-bold rounded-3 text-start" onclick="alert('<?= $isArabic ? 'إنشاء نسخة احتياطية' : 'Creating database backup' ?>');"><i class="bi bi-database-check me-2"></i><?= $isArabic ? 'إنشاء نسخة احتياطية للبيانات (Backup)' : 'Create System Backup' ?></button>
+                            <button class="btn btn-outline-danger fw-bold rounded-3 text-start py-2" onclick="alert('<?= $isArabic ? 'جاري تصدير التقرير الضريبي النهائي بملف PDF متوافق مع هيئة الزكاة' : 'Exporting final ZATCA tax report PDF file...' ?>');"><i class="bi bi-file-earmark-pdf me-2"></i><?= $isArabic ? 'تصدير التقرير الضريبي النهائي' : 'Export ZATCA Tax Report' ?></button>
+                            <button class="btn btn-outline-primary fw-bold rounded-3 text-start py-2" onclick="alert('<?= $isArabic ? 'تم تحديث وتفريغ الذاكرة المؤقتة (Cache Cleaned)' : 'Application cache flushed successfully!' ?>');"><i class="bi bi-arrow-repeat me-2"></i><?= $isArabic ? 'تحديث وتفريغ الذاكرة (Flush Cache)' : 'Flush App Cache' ?></button>
+                            <button class="btn btn-outline-dark fw-bold rounded-3 text-start py-2" onclick="alert('<?= $isArabic ? 'تم إنشاء نسخة احتياطية مشفرة للبيانات بنجاح' : 'System encrypted database backup created successfully!' ?>');"><i class="bi bi-database-check me-2"></i><?= $isArabic ? 'إنشاء نسخة احتياطية للبيانات (Backup)' : 'Create System Backup' ?></button>
                         </div>
                     </div>
                 </div>
@@ -182,7 +192,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <div class="text-muted small fw-bold text-uppercase"><?= $isArabic ? 'طلبات اليوم (Leads)' : 'Today\'s Leads' ?></div>
-                                <div class="display-6 fw-extrabold text-dark">18</div>
+                                <div class="display-6 fw-extrabold text-dark"><?= count($leads) ?></div>
                                 <div class="text-success extra-small"><i class="bi bi-graph-up-arrow me-1"></i> <?= $isArabic ? '+24% من إعلانات جوجل' : '+24% from Google Ads' ?></div>
                             </div>
                             <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-4 fs-3">
@@ -247,7 +257,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                             <span class="badge bg-primary-subtle text-primary"><?= $isArabic ? 'تحديث مباشر' : 'Live Sync' ?></span>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table table-hover align-middle mb-0" id="jobs-table">
                                 <thead class="bg-light">
                                     <tr>
                                         <th><?= $isArabic ? 'رقم أمر العمل' : 'Work Order #' ?></th>
@@ -318,7 +328,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                             <span><?= $isArabic ? 'المنطقة' : 'Area' ?>: <?= Html::encode($lead['location']) ?></span>
                                         </div>
                                         <div class="mt-2">
-                                            <button class="btn btn-sm btn-success w-100 py-1" onclick="alert('<?= $isArabic ? 'تم تحويل الطلب للفني لـ' : 'Lead assigned to technician for' ?> <?= Html::encode($lead['name']) ?>');">
+                                            <button class="btn btn-sm btn-success w-100 py-1" onclick="openAssignTechModal('<?= Html::encode(addslashes($lead['name'])) ?>', '<?= Html::encode(addslashes($lead['unit'])) ?>')">
                                                 <i class="bi bi-plus-circle me-1"></i> <?= $isArabic ? 'تعيين فني' : 'Assign Tech' ?>
                                             </button>
                                         </div>
@@ -339,11 +349,11 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                         <h4 class="fw-bold text-dark m-0"><i class="bi bi-qr-code text-success me-2"></i><?= $isArabic ? 'الفواتير الضريبية المبسطة والإلكترونية (ZATCA Compliant)' : 'ZATCA Phase 2 E-Invoices & Tax Receipts' ?></h4>
                         <p class="text-muted small mb-0"><?= $isArabic ? 'إصدار فواتير متوافقة مع المرحلة الثانية لهيئة الزكاة والضريبة والجمارك (توليد رمز QR مشفر وصيغة XML/PDF).' : 'Issue phase-2 compliant tax e-invoices with cryptographic QR & XML/PDF generation.' ?></p>
                     </div>
-                    <button class="btn btn-success rounded-3 fw-bold" onclick="alert('<?= $isArabic ? 'جار إنشاء فاتورة ضريبية جديدة متوافقة مع ZATCA' : 'Creating new ZATCA tax invoice' ?>');"><i class="bi bi-plus-lg me-1"></i> <?= $isArabic ? 'إصدار فاتورة ضريبية جديدة' : 'Create Tax Invoice' ?></button>
+                    <button class="btn btn-success rounded-3 fw-bold" onclick="openNewInvoiceModal();"><i class="bi bi-plus-lg me-1"></i> <?= $isArabic ? 'إصدار فاتورة ضريبية جديدة' : 'Create Tax Invoice' ?></button>
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle" id="zatca-invoices-table">
                         <thead class="bg-light">
                             <tr>
                                 <th><?= $isArabic ? 'رقم الفاتورة' : 'Invoice #' ?></th>
@@ -364,10 +374,10 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td>450.00 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
                                 <td>67.50 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
                                 <td class="fw-bold text-success">517.50 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
-                                <td><span class="badge bg-success-subtle text-success"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
+                                <td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '517.50')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary rounded-2 me-1"><i class="bi bi-printer me-1"></i> PDF</button>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-2"><i class="bi bi-file-earmark-code me-1"></i> XML</button>
+                                    <button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPdfInvoice('INV-2026-00891', '<?= $isArabic ? 'سعد العتيبي' : 'Saad Al-Otaibi' ?>', '517.50')"><i class="bi bi-printer me-1"></i> PDF</button>
+                                    <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="viewXmlInvoice('INV-2026-00891')"><i class="bi bi-file-earmark-code me-1"></i> XML</button>
                                 </td>
                             </tr>
                             <tr>
@@ -377,10 +387,10 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td>11,200.00 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
                                 <td>1,680.00 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
                                 <td class="fw-bold text-success">12,880.00 <?= $isArabic ? 'ر.س' : 'SAR' ?></td>
-                                <td><span class="badge bg-success-subtle text-success"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
+                                <td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '12,880.00')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary rounded-2 me-1"><i class="bi bi-printer me-1"></i> PDF</button>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-2"><i class="bi bi-file-earmark-code me-1"></i> XML</button>
+                                    <button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPdfInvoice('INV-2026-00892', '<?= $isArabic ? 'شركة الأفق العقارية' : 'Horizon Real Estate Co.' ?>', '12,880.00')"><i class="bi bi-printer me-1"></i> PDF</button>
+                                    <button class="btn btn-sm btn-outline-secondary rounded-2" onclick="viewXmlInvoice('INV-2026-00892')"><i class="bi bi-file-earmark-code me-1"></i> XML</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -397,11 +407,11 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                         <h4 class="fw-bold text-dark m-0"><i class="bi bi-person-lines-fill text-primary me-2"></i><?= $isArabic ? 'سجلات العملاء والعناوين الوطنية' : 'Customer Records & National Address Registry' ?></h4>
                         <p class="text-muted small mb-0"><?= $isArabic ? 'إدارة قاعدة بيانات عملاء المنازل والشركات وسجل أجهزة التكييف الخاصة بهم.' : 'Manage database of residential & commercial customers, equipped units and addresses.' ?></p>
                     </div>
-                    <button class="btn btn-primary rounded-3 fw-bold" onclick="alert('<?= $isArabic ? 'إضافة عميل جديد' : 'Adding new customer' ?>');"><i class="bi bi-person-plus me-1"></i> <?= $isArabic ? 'إضافة عميل جديد' : 'Add New Customer' ?></button>
+                    <button class="btn btn-primary rounded-3 fw-bold" onclick="openNewCustomerModal();"><i class="bi bi-person-plus me-1"></i> <?= $isArabic ? 'إضافة عميل جديد' : 'Add New Customer' ?></button>
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle" id="customers-table">
                         <thead class="bg-light">
                             <tr>
                                 <th><?= $isArabic ? 'معرف العميل' : 'Customer ID' ?></th>
@@ -422,7 +432,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td><span class="badge bg-info text-dark"><?= $isArabic ? '4 سبلت + 1 دولابي' : '4 Split + 1 Floor' ?></span></td>
                                 <td><?= $isArabic ? '15 مايو 2026' : 'May 15, 2026' ?></td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-dark rounded-pill px-3"><?= $isArabic ? 'السجل الكامل' : 'Full History' ?></button>
+                                    <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="alert('<?= $isArabic ? 'تفاصيل السجل الكامل للعميل #CUST-1042' : 'Full history log for #CUST-1042' ?>');"><?= $isArabic ? 'السجل الكامل' : 'Full History' ?></button>
                                 </td>
                             </tr>
                             <tr>
@@ -433,7 +443,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td><span class="badge bg-warning text-dark"><?= $isArabic ? '2 كاسيت + 1 مركزي' : '2 Cassette + 1 Central' ?></span></td>
                                 <td><?= $isArabic ? '01 يونيو 2026' : 'June 01, 2026' ?></td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-dark rounded-pill px-3"><?= $isArabic ? 'السجل الكامل' : 'Full History' ?></button>
+                                    <button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="alert('<?= $isArabic ? 'تفاصيل السجل الكامل للعميل #CUST-1043' : 'Full history log for #CUST-1043' ?>');"><?= $isArabic ? 'السجل الكامل' : 'Full History' ?></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -450,11 +460,11 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                         <h4 class="fw-bold text-dark m-0"><i class="bi bi-shield-lock-fill text-danger me-2"></i><?= $isArabic ? 'إدارة المستخدمين وصلاحيات النظام (RBAC)' : 'User Accounts & Role-Based Access Control (RBAC)' ?></h4>
                         <p class="text-muted small mb-0"><?= $isArabic ? 'تعيين الأدوار والصلاحيات (مدير النظام، مسؤول الفواتير، المشرف الميداني، الفني).' : 'Assign roles & permissions (Super Admin, Billing Manager, Dispatcher, Field Tech).' ?></p>
                     </div>
-                    <button class="btn btn-accent text-white rounded-3 fw-bold" onclick="alert('<?= $isArabic ? 'إضافة مستخدم جديد' : 'Adding new staff user' ?>');"><i class="bi bi-person-plus me-1"></i> <?= $isArabic ? 'إضافة موظف / فني' : 'Add Staff / Tech' ?></button>
+                    <button class="btn btn-accent text-white rounded-3 fw-bold" onclick="openNewUserModal();"><i class="bi bi-person-plus me-1"></i> <?= $isArabic ? 'إضافة موظف / فني' : 'Add Staff / Tech' ?></button>
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle" id="users-table">
                         <thead class="bg-light">
                             <tr>
                                 <th><?= $isArabic ? 'اسم الموظف' : 'Staff Name' ?></th>
@@ -472,7 +482,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td><span class="badge bg-danger">Super Admin</span></td>
                                 <td><?= $isArabic ? 'صلاحيات كاملة (إعدادات، فواتير ZATCA، مستخدمين)' : 'Full Root System Access (Settings, ZATCA, Users)' ?></td>
                                 <td><span class="badge bg-success"><?= $isArabic ? 'نشط' : 'Active' ?></span></td>
-                                <td><button class="btn btn-sm btn-outline-secondary"><?= $isArabic ? 'تعديل' : 'Edit' ?></button></td>
+                                <td><button class="btn btn-sm btn-outline-secondary" onclick="alert('تعديل حساب خليل السعيد');"><?= $isArabic ? 'تعديل' : 'Edit' ?></button></td>
                             </tr>
                             <tr>
                                 <td><?= $isArabic ? 'أليكس ريفيرا' : 'Alex Rivera' ?></td>
@@ -480,7 +490,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td><span class="badge bg-info text-dark">Field Technician</span></td>
                                 <td><?= $isArabic ? 'عرض وإغلاق أومر العمل الميدانية فقط' : 'View & Close Field Work Orders Only' ?></td>
                                 <td><span class="badge bg-success"><?= $isArabic ? 'نشط' : 'Active' ?></span></td>
-                                <td><button class="btn btn-sm btn-outline-secondary"><?= $isArabic ? 'تعديل' : 'Edit' ?></button></td>
+                                <td><button class="btn btn-sm btn-outline-secondary" onclick="alert('تعديل حساب أليكس ريفيرا');"><?= $isArabic ? 'تعديل' : 'Edit' ?></button></td>
                             </tr>
                             <tr>
                                 <td><?= $isArabic ? 'ريم الشمري' : 'Reem Al-Shammari' ?></td>
@@ -488,7 +498,7 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
                                 <td><span class="badge bg-warning text-dark">Accountant</span></td>
                                 <td><?= $isArabic ? 'إصدار وتصديق فواتير ZATCA والتقارير المالية' : 'Issue & Submit ZATCA Invoices & Financial Reports' ?></td>
                                 <td><span class="badge bg-success"><?= $isArabic ? 'نشط' : 'Active' ?></span></td>
-                                <td><button class="btn btn-sm btn-outline-secondary"><?= $isArabic ? 'تعديل' : 'Edit' ?></button></td>
+                                <td><button class="btn btn-sm btn-outline-secondary" onclick="alert('تعديل حساب ريم الشمري');"><?= $isArabic ? 'تعديل' : 'Edit' ?></button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -575,6 +585,265 @@ $isArabic = strpos(Yii::$app->language, 'ar') === 0;
     </div>
 </div>
 
+<!-- ================= MODALS FOR PROTOTYPE FUNCTIONALITY ================= -->
+
+<!-- Modal 1: Create New ZATCA Invoice -->
+<div class="modal fade" id="newInvoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h5 class="modal-title fw-bold"><i class="bi bi-receipt me-2 text-success"></i><?= $isArabic ? 'إصدار فاتورة ضريبية مبسطة جديدة (ZATCA)' : 'Create ZATCA Tax E-Invoice' ?></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="create-invoice-form" onsubmit="submitNewInvoice(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'اسم العميل' : 'Customer Name' ?></label>
+                        <input type="text" id="inv-cust-name" class="form-control" placeholder="e.g. Abdullah Al-Otaibi" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'الخدمة / صيانة التكييف' : 'Service / HVAC Item' ?></label>
+                        <input type="text" id="inv-service" class="form-control" placeholder="e.g. Split AC Maintenance & Gas Wash" required>
+                    </div>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'المبلغ (قبل الضريبة)' : 'Subtotal (Excl. VAT)' ?></label>
+                            <input type="number" step="0.01" id="inv-subtotal" class="form-control" placeholder="400.00" oninput="calcVat()" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'ضريبة (15%)' : 'VAT (15%)' ?></label>
+                            <input type="text" id="inv-vat" class="form-control bg-light" readonly>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-success bg-opacity-10 border border-success rounded-3 mb-3 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold text-dark"><?= $isArabic ? 'الإجمالي النهائي (Net Total):' : 'Net Total:' ?></span>
+                        <span class="fs-5 fw-extrabold text-success" id="inv-net-display">0.00 SAR</span>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold py-2"><i class="bi bi-qr-code me-1"></i> <?= $isArabic ? 'إصدار الفاتورة وتشفير QR' : 'Generate & Stamp ZATCA Invoice' ?></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2: View ZATCA PDF Print Invoice -->
+<div class="modal fade" id="pdfInvoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-primary text-white rounded-top-4">
+                <h5 class="modal-title fw-bold"><i class="bi bi-printer me-2"></i><?= $isArabic ? 'معاينة وطباعة الفاتورة الضريبية (ZATCA PDF)' : 'ZATCA Tax Invoice PDF Preview' ?></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 bg-white" id="pdf-print-area">
+                <div class="d-flex justify-content-between border-bottom pb-3 mb-3">
+                    <div>
+                        <h4 class="fw-extrabold text-dark m-0">شركة كلايميت تك لأنظمة التكييف المحدودة</h4>
+                        <div class="extra-small text-muted">ClimateTech HVAC & Electrical Systems Co.</div>
+                        <div class="extra-small text-muted mt-1">الرقم الضريبي: <strong>310488942100003</strong> | السجل التجاري: <strong>1010889421</strong></div>
+                        <div class="extra-small text-muted">الرياض - حي العليا - طريق الملك فهد - مبنى 7420</div>
+                    </div>
+                    <div class="text-end">
+                        <span class="badge bg-success fs-6 mb-2">فاتورة ضريبية مبسطة</span>
+                        <div class="fw-bold text-dark" id="pdf-inv-num">INV-2026-00891</div>
+                        <div class="extra-small text-muted">التاريخ: <?= date('Y-m-d H:i') ?></div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <div class="extra-small text-muted">عميل الفاتورة:</div>
+                            <div class="fw-bold text-dark fs-6" id="pdf-cust-name">سعد العتيبي</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3 text-end">
+                            <div class="extra-small text-muted">حالة السداد:</div>
+                            <div class="fw-bold text-success fs-6"><i class="bi bi-check-circle me-1"></i> مدفوع (ZATCA Verified)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered align-middle extra-small">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>الوصف / الخدمة</th>
+                                <th>المبلغ (غير شامل)</th>
+                                <th>ضريبة القيمة المضافة (15%)</th>
+                                <th>الإجمالي الصافي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>صيانة غسيل نفاث وسحب فريون وتعبئة R410A</td>
+                                <td>450.00 ر.س</td>
+                                <td>67.50 ر.س</td>
+                                <td class="fw-bold text-success" id="pdf-total-val">517.50 ر.س</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 border">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white p-2 border rounded-3 text-center">
+                            <i class="bi bi-qr-code fs-1 text-dark"></i>
+                            <div class="extra-small text-muted" style="font-size: 8px;">ZATCA TLV STAMP</div>
+                        </div>
+                        <div class="extra-small text-muted">
+                            <div><strong>رمز QR مشفر وفق معايير هيئة الزكاة (Phase 2)</strong></div>
+                            <div>Hash: 4a8e8f90c12e34bd7810fe90aa812f</div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="text-muted extra-small">الإجمالي الكلي النهائي</div>
+                        <div class="display-6 fw-extrabold text-success" id="pdf-total-display">517.50 ر.س</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $isArabic ? 'إغلاق' : 'Close' ?></button>
+                <button type="button" class="btn btn-primary fw-bold" onclick="window.print()"><i class="bi bi-printer me-1"></i> <?= $isArabic ? 'طباعة الفاتورة' : 'Print Invoice' ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 3: View ZATCA UBL 2.1 XML -->
+<div class="modal fade" id="xmlInvoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h5 class="modal-title fw-bold"><i class="bi bi-file-earmark-code me-2 text-warning"></i>ZATCA UBL 2.1 Cryptographic XML View</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 bg-dark text-warning">
+                <pre class="m-0 extra-small" style="max-height: 400px; overflow-y: auto;"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+         xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"&gt;
+    &lt;cbc:ProfileID&gt;reporting:1.0&lt;/cbc:ProfileID&gt;
+    &lt;cbc:ID id="xml-inv-id"&gt;INV-2026-00891&lt;/cbc:ID&gt;
+    &lt;cbc:UUID&gt;3f2504e0-4f89-11d3-9a0c-0305e82c3301&lt;/cbc:UUID&gt;
+    &lt;cbc:IssueDate&gt;<?= date('Y-m-d') ?>&lt;/cbc:IssueDate&gt;
+    &lt;cbc:InvoiceTypeCode name="0200000"&gt;388&lt;/cbc:InvoiceTypeCode&gt;
+    &lt;cac:AccountingSupplierParty&gt;
+        &lt;cac:Party&gt;
+            &lt;cac:PartyTaxScheme&gt;
+                &lt;cbc:CompanyID&gt;310488942100003&lt;/cbc:CompanyID&gt;
+            &lt;/cac:PartyTaxScheme&gt;
+        &lt;/cac:Party&gt;
+    &lt;/cac:AccountingSupplierParty&gt;
+    &lt;cac:TaxTotal&gt;
+        &lt;cbc:TaxAmount currencyID="SAR"&gt;67.50&lt;/cbc:TaxAmount&gt;
+    &lt;/cac:TaxTotal&gt;
+&lt;/Invoice&gt;</code></pre>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $isArabic ? 'إغلاق' : 'Close' ?></button>
+                <button type="button" class="btn btn-warning fw-bold" onclick="alert('Downloading ZATCA XML file...');"><i class="bi bi-download me-1"></i> Download XML</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 4: Add New Customer -->
+<div class="modal fade" id="newCustomerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-primary text-white rounded-top-4">
+                <h5 class="modal-title fw-bold"><i class="bi bi-person-plus me-2"></i><?= $isArabic ? 'إضافة عميل جديد' : 'Add New Customer Record' ?></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="create-customer-form" onsubmit="submitNewCustomer(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'اسم العميل / الشركة' : 'Customer / Company Name' ?></label>
+                        <input type="text" id="cust-name-input" class="form-control" placeholder="e.g. Eng. Tariq Al-Mansoor" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'رقم الجوال' : 'Phone Number' ?></label>
+                        <input type="text" id="cust-phone-input" class="form-control" placeholder="050XXXXXXX" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'العنوان الوطني والحي' : 'National Address & District' ?></label>
+                        <input type="text" id="cust-address-input" class="form-control" placeholder="Riyadh - Al-Malqa District" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2"><i class="bi bi-check-circle me-1"></i> <?= $isArabic ? 'حفظ العميل' : 'Save Customer Record' ?></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 5: Add New Staff / Technician -->
+<div class="modal fade" id="newUserModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h5 class="modal-title fw-bold"><i class="bi bi-person-badge me-2 text-info"></i><?= $isArabic ? 'إضافة موظف / فني ميداني' : 'Add Staff User / Technician' ?></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="create-user-form" onsubmit="submitNewUser(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'اسم الموظف الرسمي' : 'Staff Member Name' ?></label>
+                        <input type="text" id="user-name-input" class="form-control" placeholder="e.g. Marcus Vance" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'البريد الإلكتروني / اسم المستخدم' : 'Email / Username' ?></label>
+                        <input type="email" id="user-email-input" class="form-control" placeholder="marcus@climatetech.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'الدور الوظيفي (Role)' : 'Assigned Role' ?></label>
+                        <select id="user-role-select" class="form-select">
+                            <option value="Field Technician">Field Technician</option>
+                            <option value="Accountant">Accountant</option>
+                            <option value="Dispatch Manager">Dispatch Manager</option>
+                            <option value="Super Admin">Super Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-accent text-white w-100 fw-bold py-2"><i class="bi bi-shield-check me-1"></i> <?= $isArabic ? 'إنشاء الحساب وتعيين الصلاحيات' : 'Create User & Assign RBAC' ?></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 6: Assign Technician Modal -->
+<div class="modal fade" id="assignTechModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-success text-white rounded-top-4">
+                <h5 class="modal-title fw-bold"><i class="bi bi-truck me-2"></i><?= $isArabic ? 'تعيين فني لأمر العمل الميداني' : 'Assign Technician to Lead' ?></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="assign-tech-form" onsubmit="submitAssignTech(event)">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'اسم العميل' : 'Customer Name' ?></label>
+                        <input type="text" id="assign-cust-name" class="form-control bg-light" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'نوع الخدمة' : 'Service Type' ?></label>
+                        <input type="text" id="assign-service-type" class="form-control bg-light" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small"><?= $isArabic ? 'اختر الفني الميداني' : 'Select Field Technician' ?></label>
+                        <select id="assign-tech-select" class="form-select">
+                            <option value="Alex Rivera">Alex Rivera (Split AC Specialist)</option>
+                            <option value="Marcus Vance">Marcus Vance (Central HVAC Specialist)</option>
+                            <option value="Daniel Kim">Daniel Kim (Electrical Specialist)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 fw-bold py-2"><i class="bi bi-send me-1"></i> <?= $isArabic ? 'إرسال التوجيه للفني' : 'Dispatch Order to Tech' ?></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var tabButtons = document.querySelectorAll('#erpTabs button[data-bs-toggle="tab"]');
@@ -595,4 +864,147 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function calcVat() {
+    var subtotal = parseFloat(document.getElementById('inv-subtotal').value) || 0;
+    var vat = subtotal * 0.15;
+    var net = subtotal + vat;
+    document.getElementById('inv-vat').value = vat.toFixed(2) + ' SAR';
+    document.getElementById('inv-net-display').innerText = net.toFixed(2) + ' SAR';
+}
+
+function openNewInvoiceModal() {
+    var modal = new bootstrap.Modal(document.getElementById('newInvoiceModal'));
+    modal.show();
+}
+
+function submitNewInvoice(e) {
+    e.preventDefault();
+    var name = document.getElementById('inv-cust-name').value;
+    var service = document.getElementById('inv-service').value;
+    var subtotal = parseFloat(document.getElementById('inv-subtotal').value) || 0;
+    var vat = subtotal * 0.15;
+    var net = subtotal + vat;
+    var invNum = 'INV-2026-00' + Math.floor(100 + Math.random() * 900);
+
+    var tbody = document.querySelector('#zatca-invoices-table tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td><strong>' + invNum + '</strong></td>' +
+        '<td>' + name + '</td>' +
+        '<td>' + service + '</td>' +
+        '<td>' + subtotal.toFixed(2) + ' SAR</td>' +
+        '<td>' + vat.toFixed(2) + ' SAR</td>' +
+        '<td class="fw-bold text-success">' + net.toFixed(2) + ' SAR</td>' +
+        '<td><span class="badge bg-success-subtle text-success pointer"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>' +
+        '<td>' +
+        '<button class="btn btn-sm btn-outline-primary rounded-2 me-1" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-printer me-1"></i> PDF</button>' +
+        '<button class="btn btn-sm btn-outline-secondary rounded-2" onclick="viewXmlInvoice(\'' + invNum + '\')"><i class="bi bi-file-earmark-code me-1"></i> XML</button>' +
+        '</td>';
+    tbody.prepend(tr);
+
+    var modalEl = document.getElementById('newInvoiceModal');
+    var modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+    alert('ZATCA Tax Invoice ' + invNum + ' generated and encrypted successfully!');
+}
+
+function viewPdfInvoice(num, name, total) {
+    document.getElementById('pdf-inv-num').innerText = num;
+    document.getElementById('pdf-cust-name').innerText = name;
+    document.getElementById('pdf-total-val').innerText = total + ' SAR';
+    document.getElementById('pdf-total-display').innerText = total + ' SAR';
+    var modal = new bootstrap.Modal(document.getElementById('pdfInvoiceModal'));
+    modal.show();
+}
+
+function viewXmlInvoice(num) {
+    document.getElementById('xml-inv-id').innerText = num;
+    var modal = new bootstrap.Modal(document.getElementById('xmlInvoiceModal'));
+    modal.show();
+}
+
+function openNewCustomerModal() {
+    var modal = new bootstrap.Modal(document.getElementById('newCustomerModal'));
+    modal.show();
+}
+
+function submitNewCustomer(e) {
+    e.preventDefault();
+    var name = document.getElementById('cust-name-input').value;
+    var phone = document.getElementById('cust-phone-input').value;
+    var address = document.getElementById('cust-address-input').value;
+    var custId = '#CUST-' + Math.floor(1000 + Math.random() * 9000);
+
+    var tbody = document.querySelector('#customers-table tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + custId + '</td>' +
+        '<td>' + name + '</td>' +
+        '<td>' + phone + '</td>' +
+        '<td>' + address + '</td>' +
+        '<td><span class="badge bg-info text-dark">Split AC Unit</span></td>' +
+        '<td>Just Registered</td>' +
+        '<td><button class="btn btn-sm btn-outline-dark rounded-pill px-3" onclick="alert(\'Full history log for ' + custId + '\');">Full History</button></td>';
+    tbody.prepend(tr);
+
+    var modalEl = document.getElementById('newCustomerModal');
+    var modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+    alert('Customer ' + name + ' registered successfully!');
+}
+
+function openNewUserModal() {
+    var modal = new bootstrap.Modal(document.getElementById('newUserModal'));
+    modal.show();
+}
+
+function submitNewUser(e) {
+    e.preventDefault();
+    var name = document.getElementById('user-name-input').value;
+    var email = document.getElementById('user-email-input').value;
+    var role = document.getElementById('user-role-select').value;
+
+    var tbody = document.querySelector('#users-table tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + name + '</td>' +
+        '<td>' + email + '</td>' +
+        '<td><span class="badge bg-primary">' + role + '</span></td>' +
+        '<td>Granted RBAC Permissions</td>' +
+        '<td><span class="badge bg-success">Active</span></td>' +
+        '<td><button class="btn btn-sm btn-outline-secondary">Edit</button></td>';
+    tbody.prepend(tr);
+
+    var modalEl = document.getElementById('newUserModal');
+    var modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+    alert('Staff account created for ' + name + ' with role: ' + role);
+}
+
+function openAssignTechModal(custName, service) {
+    document.getElementById('assign-cust-name').value = custName;
+    document.getElementById('assign-service-type').value = service;
+    var modal = new bootstrap.Modal(document.getElementById('assignTechModal'));
+    modal.show();
+}
+
+function submitAssignTech(e) {
+    e.preventDefault();
+    var cust = document.getElementById('assign-cust-name').value;
+    var tech = document.getElementById('assign-tech-select').value;
+    var jobNum = 'JOB-99' + Math.floor(15 + Math.random() * 80);
+
+    var tbody = document.querySelector('#jobs-table tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td><strong class="text-primary">' + jobNum + '</strong></td>' +
+        '<td><div class="fw-bold text-dark">' + cust + '</div><div class="text-muted extra-small"><i class="bi bi-geo-alt"></i> Assigned Location</div></td>' +
+        '<td><span class="badge bg-dark-subtle text-dark">HVAC Unit</span></td>' +
+        '<td><div class="d-flex align-items-center gap-2"><div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width:28px; height:28px; font-size:11px;">' + tech.substr(0, 2).toUpperCase() + '</div><span class="small font-weight-bold">' + tech + '</span></div></td>' +
+        '<td><span class="badge bg-info text-dark rounded-pill px-3 py-2">Dispatched</span></td>' +
+        '<td><button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="alert(\'Work order ' + jobNum + '\');">Manage</button></td>';
+    tbody.prepend(tr);
+
+    var modalEl = document.getElementById('assignTechModal');
+    var modal = bootstrap.Modal.getInstance(modalEl);
+    if (modal) modal.hide();
+    alert('Dispatched ' + jobNum + ' for ' + cust + ' to technician ' + tech + '!');
+}
 </script>
