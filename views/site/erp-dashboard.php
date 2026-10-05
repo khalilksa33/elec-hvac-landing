@@ -733,37 +733,75 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
 
 <!-- Modal 1: Create New ZATCA Invoice -->
 <div class="modal fade" id="newInvoiceModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg rounded-4">
             <div class="modal-header bg-dark text-white rounded-top-4">
-                <h5 class="modal-title fw-bold"><i class="bi bi-receipt me-2 text-success"></i><?= $isArabic ? 'إصدار فاتورة ضريبية مبسطة جديدة (ZATCA)' : 'Create ZATCA Tax E-Invoice' ?></h5>
+                <h5 class="modal-title fw-bold"><i class="bi bi-receipt me-2 text-success"></i><?= $isArabic ? 'إصدار فاتورة ضريبية جديدة (ZATCA)' : 'Create ZATCA Tax E-Invoice' ?></h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <form id="create-invoice-form" onsubmit="submitNewInvoice(event)">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small"><?= $isArabic ? 'اسم العميل' : 'Customer Name' ?></label>
-                        <input type="text" id="inv-cust-name" class="form-control" placeholder="e.g. Abdullah Al-Otaibi" required>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-7">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'اسم العميل' : 'Customer Name' ?> <span class="text-danger">*</span></label>
+                            <input type="text" id="inv-cust-name" class="form-control form-control-lg" placeholder="<?= $isArabic ? 'مثال: سعد العتيبي / شركة الأفق' : 'e.g. Abdullah Al-Otaibi / Horizon Co.' ?>" required autofocus>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold small"><?= $isArabic ? 'نوع الفاتورة (ZATCA Type)' : 'Invoice Type' ?></label>
+                            <select id="inv-type-select" class="form-select form-select-lg">
+                                <option value="B2C Simplified"><?= $isArabic ? 'فاتورة ضريبية مبسطة (B2C)' : 'Simplified Tax Invoice (B2C)' ?></option>
+                                <option value="B2B Standard"><?= $isArabic ? 'فاتورة ضريبية قياسية (B2B)' : 'Standard Tax Invoice (B2B)' ?></option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small"><?= $isArabic ? 'الخدمة / صيانة التكييف' : 'Service / HVAC Item' ?></label>
-                        <input type="text" id="inv-service" class="form-control" placeholder="e.g. Split AC Maintenance & Gas Wash" required>
+
+                    <!-- Dynamic Line Items Section -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label class="form-label fw-bold text-dark small m-0">
+                                <i class="bi bi-list-check me-1 text-primary"></i> <?= $isArabic ? 'بنود الفاتورة والخدمات' : 'Invoice Line Items & Services' ?>
+                            </label>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="addInvoiceItemRow()">
+                                <i class="bi bi-plus-circle me-1"></i> <?= $isArabic ? 'إضافة بند آخر' : 'Add Line Item' ?>
+                            </button>
+                        </div>
+                        <div class="table-responsive border rounded-3 bg-light p-2">
+                            <table class="table table-borderless align-middle mb-0" id="invoice-items-table">
+                                <thead class="border-bottom extra-small text-muted">
+                                    <tr>
+                                        <th style="min-width: 240px;"><?= $isArabic ? 'وصف البند / الخدمة' : 'Item Description / Service' ?></th>
+                                        <th style="width: 100px;"><?= $isArabic ? 'الكمية' : 'Qty' ?></th>
+                                        <th style="width: 140px;"><?= $isArabic ? 'سعر الوحدة (ر.س)' : 'Unit Price (SAR)' ?></th>
+                                        <th style="width: 130px;"><?= $isArabic ? 'المبلغ الإجمالي' : 'Subtotal' ?></th>
+                                        <th style="width: 40px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoice-items-tbody">
+                                    <!-- Populated via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
+                    <!-- Summary Totals Breakdown -->
                     <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'المبلغ (قبل الضريبة)' : 'Subtotal (Excl. VAT)' ?></label>
-                            <input type="number" step="0.01" id="inv-subtotal" class="form-control" placeholder="400.00" oninput="calcVat()" required>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold extra-small text-muted mb-1"><?= $isArabic ? 'المبلغ قبل الضريبة' : 'Subtotal (Excl. VAT)' ?></label>
+                            <input type="text" id="inv-subtotal" class="form-control bg-white fw-bold" readonly value="0.00 SAR">
                         </div>
-                        <div class="col-6">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'ضريبة (15%)' : 'VAT (15%)' ?></label>
-                            <input type="text" id="inv-vat" class="form-control bg-light" readonly>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold extra-small text-muted mb-1"><?= $isArabic ? 'ضريبة القيمة المضافة (15%)' : 'VAT Amount (15%)' ?></label>
+                            <input type="text" id="inv-vat" class="form-control bg-white fw-bold text-primary" readonly value="0.00 SAR">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold extra-small text-muted mb-1"><?= $isArabic ? 'الإجمالي النهائي الصافي' : 'Net Total' ?></label>
+                            <input type="text" id="inv-net-display" class="form-control bg-success text-white fw-extrabold" readonly value="0.00 SAR">
                         </div>
                     </div>
-                    <div class="p-3 bg-success bg-opacity-10 border border-success rounded-3 mb-3 d-flex justify-content-between align-items-center">
-                        <span class="fw-bold text-dark"><?= $isArabic ? 'الإجمالي النهائي (Net Total):' : 'Net Total:' ?></span>
-                        <span class="fs-5 fw-extrabold text-success" id="inv-net-display">0.00 SAR</span>
-                    </div>
-                    <button type="submit" class="btn btn-success w-100 fw-bold py-2"><i class="bi bi-qr-code me-1"></i> <?= $isArabic ? 'إصدار الفاتورة وتشفير QR' : 'Generate & Stamp ZATCA Invoice' ?></button>
+
+                    <button type="submit" class="btn btn-success w-100 fw-bold py-2 fs-6 shadow-sm">
+                        <i class="bi bi-qr-code me-1"></i> <?= $isArabic ? 'إصدار الفاتورة وتشفير QR (ZATCA)' : 'Generate & Stamp ZATCA Invoice' ?>
+                    </button>
                 </form>
             </div>
         </div>
@@ -819,18 +857,24 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                         <table class="table table-bordered align-middle extra-small mb-0">
                             <thead class="bg-light">
                                 <tr>
-                                    <th>الوصف / الخدمة</th>
-                                    <th>المبلغ (غير شامل الضريبة)</th>
-                                    <th>ضريبة القيمة المضافة (15%)</th>
-                                    <th>الإجمالي الصافي النهائي</th>
+                                    <th style="width: 40px;">#</th>
+                                    <th><?= $isArabic ? 'الوصف / الخدمة' : 'Item Description / Service' ?></th>
+                                    <th style="width: 70px;"><?= $isArabic ? 'الكمية' : 'Qty' ?></th>
+                                    <th style="width: 110px;"><?= $isArabic ? 'سعر الوحدة' : 'Unit Price' ?></th>
+                                    <th style="width: 120px;"><?= $isArabic ? 'المبلغ (قبل الضريبة)' : 'Subtotal' ?></th>
+                                    <th style="width: 110px;"><?= $isArabic ? 'ضريبة (15%)' : 'VAT (15%)' ?></th>
+                                    <th style="width: 120px;"><?= $isArabic ? 'الإجمالي الصافي' : 'Total Net' ?></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="pdf-items-tbody">
                                 <tr>
-                                    <td id="pdf-service-desc">صيانة غسيل نفاث 3 مكيفات سبلت + شحن فريون R410A</td>
-                                    <td id="pdf-subtotal-val">450.00 SAR</td>
-                                    <td id="pdf-vat-val">67.50 SAR</td>
-                                    <td class="fw-bold text-success" id="pdf-total-val">517.50 SAR</td>
+                                    <td>1</td>
+                                    <td>صيانة غسيل نفاث 3 مكيفات سبلت + شحن فريون R410A</td>
+                                    <td>1</td>
+                                    <td>450.00 SAR</td>
+                                    <td>450.00 SAR</td>
+                                    <td>67.50 SAR</td>
+                                    <td class="fw-bold text-success">517.50 SAR</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1019,41 +1063,130 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    // Auto-focus input when ZATCA invoice modal opens
+    var newInvModalEl = document.getElementById('newInvoiceModal');
+    if (newInvModalEl) {
+        newInvModalEl.addEventListener('shown.bs.modal', function () {
+            var nameInput = document.getElementById('inv-cust-name');
+            if (nameInput) {
+                nameInput.focus();
+                nameInput.select();
+            }
+        });
+    }
 });
 
-function calcVat() {
-    var subtotal = parseFloat(document.getElementById('inv-subtotal').value) || 0;
-    var vat = subtotal * 0.15;
-    var net = subtotal + vat;
-    document.getElementById('inv-vat').value = vat.toFixed(2) + ' SAR';
-    document.getElementById('inv-net-display').innerText = net.toFixed(2) + ' SAR';
+window.generatedInvoicesMap = window.generatedInvoicesMap || {};
+
+function addInvoiceItemRow(desc, qty, price) {
+    desc = desc || '';
+    qty = qty || 1;
+    price = (price !== undefined && price !== null && price !== '') ? price : '';
+
+    var tbody = document.getElementById('invoice-items-tbody');
+    if (!tbody) return;
+
+    var tr = document.createElement('tr');
+    tr.className = 'inv-item-row';
+    tr.innerHTML = '<td><input type="text" class="form-control form-control-sm inv-item-desc" value="' + desc.replace(/"/g, '&quot;') + '" placeholder="<?= $isArabic ? "وصف الخدمة أو قطعة الغيار" : "Service or item description" ?>" oninput="recalcInvoiceTotals()" required></td>' +
+        '<td><input type="number" min="1" step="1" class="form-control form-control-sm inv-item-qty" value="' + qty + '" oninput="recalcInvoiceTotals()" required></td>' +
+        '<td><input type="number" min="0" step="0.01" class="form-control form-control-sm inv-item-price" value="' + price + '" placeholder="0.00" oninput="recalcInvoiceTotals()" required></td>' +
+        '<td><input type="text" class="form-control form-control-sm bg-light inv-item-subtotal" readonly value="0.00 SAR"></td>' +
+        '<td><button type="button" class="btn btn-sm btn-outline-danger border-0 p-1" onclick="removeInvoiceItemRow(this)" title="Remove item"><i class="bi bi-trash"></i></button></td>';
+    tbody.appendChild(tr);
+    recalcInvoiceTotals();
+}
+
+function removeInvoiceItemRow(btn) {
+    var tbody = document.getElementById('invoice-items-tbody');
+    if (tbody && tbody.children.length > 1) {
+        btn.closest('tr').remove();
+        recalcInvoiceTotals();
+    } else {
+        alert('<?= $isArabic ? "يجب أن تحتوي الفاتورة على بند واحد على الأقل" : "An invoice must contain at least one line item." ?>');
+    }
+}
+
+function recalcInvoiceTotals() {
+    var rows = document.querySelectorAll('#invoice-items-tbody .inv-item-row');
+    var totalSub = 0;
+    rows.forEach(function(row) {
+        var qty = parseFloat(row.querySelector('.inv-item-qty').value) || 0;
+        var price = parseFloat(row.querySelector('.inv-item-price').value) || 0;
+        var rowSub = qty * price;
+        totalSub += rowSub;
+        row.querySelector('.inv-item-subtotal').value = rowSub.toFixed(2) + ' SAR';
+    });
+
+    var vat = totalSub * 0.15;
+    var net = totalSub + vat;
+
+    var subEl = document.getElementById('inv-subtotal');
+    var vatEl = document.getElementById('inv-vat');
+    var netEl = document.getElementById('inv-net-display');
+
+    if (subEl) subEl.value = totalSub.toFixed(2) + ' SAR';
+    if (vatEl) vatEl.value = vat.toFixed(2) + ' SAR';
+    if (netEl) netEl.value = net.toFixed(2) + ' SAR';
 }
 
 function openNewInvoiceModal() {
-    var modal = new bootstrap.Modal(document.getElementById('newInvoiceModal'));
+    var tbody = document.getElementById('invoice-items-tbody');
+    if (tbody) {
+        tbody.innerHTML = '';
+        addInvoiceItemRow('<?= $isArabic ? "صيانة وتنظيف غسيل نفاث مكيف سبلت" : "Split AC Jet Wash Maintenance" ?>', 1, 150.00);
+        addInvoiceItemRow('<?= $isArabic ? "تعبئة غاز فريون R410A أصلي (كجم)" : "Original R410A Gas Refill (Kg)" ?>', 2, 100.00);
+    }
+    var modalEl = document.getElementById('newInvoiceModal');
+    var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
     modal.show();
 }
 
 function submitNewInvoice(e) {
     e.preventDefault();
     var name = document.getElementById('inv-cust-name').value;
-    var service = document.getElementById('inv-service').value;
-    var subtotal = parseFloat(document.getElementById('inv-subtotal').value) || 0;
-    var vat = subtotal * 0.15;
-    var net = subtotal + vat;
+    var rows = document.querySelectorAll('#invoice-items-tbody .inv-item-row');
+
+    var items = [];
+    var totalSub = 0;
+    rows.forEach(function(row) {
+        var desc = row.querySelector('.inv-item-desc').value || 'Service Item';
+        var qty = parseFloat(row.querySelector('.inv-item-qty').value) || 1;
+        var price = parseFloat(row.querySelector('.inv-item-price').value) || 0;
+        var sub = qty * price;
+        totalSub += sub;
+        items.push({ desc: desc, qty: qty, price: price, subtotal: sub });
+    });
+
+    var vat = totalSub * 0.15;
+    var net = totalSub + vat;
     var invNum = 'INV-2026-00' + Math.floor(100 + Math.random() * 900);
+
+    window.generatedInvoicesMap[invNum] = {
+        num: invNum,
+        name: name,
+        items: items,
+        subtotal: totalSub,
+        vat: vat,
+        net: net
+    };
+
+    var serviceSummary = items.map(function(i) { return i.desc; }).join(' + ');
+    if (serviceSummary.length > 55) {
+        serviceSummary = serviceSummary.substring(0, 52) + '...';
+    }
 
     var tbody = document.querySelector('#zatca-invoices-table tbody');
     var tr = document.createElement('tr');
     tr.innerHTML = '<td><strong>' + invNum + '</strong></td>' +
         '<td>' + name + '</td>' +
-        '<td>' + service + '</td>' +
-        '<td>' + subtotal.toFixed(2) + ' SAR</td>' +
+        '<td>' + serviceSummary + '</td>' +
+        '<td>' + totalSub.toFixed(2) + ' SAR</td>' +
         '<td>' + vat.toFixed(2) + ' SAR</td>' +
         '<td class="fw-bold text-success">' + net.toFixed(2) + ' SAR</td>' +
-        '<td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + subtotal.toFixed(2) + '\', \'' + vat.toFixed(2) + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>' +
+        '<td><span class="badge bg-success-subtle text-success pointer" onclick="viewPdfInvoice(\'' + invNum + '\')"><i class="bi bi-qr-code me-1"></i> QR Compliant</span></td>' +
         '<td><div class="btn-group btn-group-sm">' +
-        '<button class="btn btn-outline-primary fw-bold" onclick="viewPdfInvoice(\'' + invNum + '\', \'' + name + '\', \'' + subtotal.toFixed(2) + '\', \'' + vat.toFixed(2) + '\', \'' + net.toFixed(2) + '\')"><i class="bi bi-printer me-1"></i> A4 Tax Invoice</button>' +
+        '<button class="btn btn-outline-primary fw-bold" onclick="viewPdfInvoice(\'' + invNum + '\')"><i class="bi bi-printer me-1"></i> A4 Tax Invoice</button>' +
         '<button class="btn btn-outline-secondary" onclick="viewXmlInvoice(\'' + invNum + '\')"><i class="bi bi-file-earmark-code"></i> XML</button>' +
         '</div></td>';
     tbody.prepend(tr);
@@ -1061,18 +1194,43 @@ function submitNewInvoice(e) {
     var modalEl = document.getElementById('newInvoiceModal');
     var modal = bootstrap.Modal.getInstance(modalEl);
     if (modal) modal.hide();
-    alert('ZATCA Tax Invoice ' + invNum + ' generated and encrypted successfully!');
+    alert('ZATCA Tax Invoice ' + invNum + ' generated and encrypted successfully with ' + items.length + ' item(s)!');
 }
 
-function viewPdfInvoice(num, name, subtotal, vat, total) {
+function viewPdfInvoice(num, fallbackName, fallbackSub, fallbackVat, fallbackNet) {
+    var invData = window.generatedInvoicesMap && window.generatedInvoicesMap[num];
+
+    var name = invData ? invData.name : (fallbackName || 'Saad Al-Otaibi');
+    var subtotal = invData ? invData.subtotal : (parseFloat(fallbackSub) || 450);
+    var vat = invData ? invData.vat : (parseFloat(fallbackVat) || 67.5);
+    var total = invData ? invData.net : (parseFloat(fallbackNet) || 517.5);
+    var items = invData ? invData.items : [
+        { desc: 'صيانة غسيل نفاث 3 مكيفات سبلت + شحن فريون R410A', qty: 1, price: subtotal, subtotal: subtotal }
+    ];
+
     document.getElementById('pdf-inv-num').innerText = num;
     document.getElementById('pdf-cust-name').innerText = name;
-    document.getElementById('pdf-subtotal-val').innerText = subtotal + ' SAR';
-    document.getElementById('pdf-vat-val').innerText = vat + ' SAR';
-    document.getElementById('pdf-total-val').innerText = total + ' SAR';
-    document.getElementById('pdf-total-display').innerText = total + ' SAR';
+    document.getElementById('pdf-total-display').innerText = total.toFixed(2) + ' SAR';
 
-    var qrContent = 'ZATCA|Seller:<?= urlencode($companyNameEn) ?>|VAT:<?= $vatNum ?>|Inv:' + num + '|Total:' + total + '|VAT:' + vat;
+    var tbody = document.getElementById('pdf-items-tbody');
+    if (tbody) {
+        tbody.innerHTML = '';
+        items.forEach(function(item, idx) {
+            var itemVat = item.subtotal * 0.15;
+            var itemTotal = item.subtotal + itemVat;
+            var tr = document.createElement('tr');
+            tr.innerHTML = '<td>' + (idx + 1) + '</td>' +
+                '<td>' + item.desc + '</td>' +
+                '<td>' + item.qty + '</td>' +
+                '<td>' + item.price.toFixed(2) + ' SAR</td>' +
+                '<td>' + item.subtotal.toFixed(2) + ' SAR</td>' +
+                '<td>' + itemVat.toFixed(2) + ' SAR</td>' +
+                '<td class="fw-bold text-success">' + itemTotal.toFixed(2) + ' SAR</td>';
+            tbody.appendChild(tr);
+        });
+    }
+
+    var qrContent = 'ZATCA|Seller:<?= urlencode($companyNameEn) ?>|VAT:<?= $vatNum ?>|Inv:' + num + '|Total:' + total.toFixed(2) + '|VAT:' + vat.toFixed(2);
     document.getElementById('pdf-zatca-qr-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(qrContent);
 
     var modal = new bootstrap.Modal(document.getElementById('pdfInvoiceModal'));
