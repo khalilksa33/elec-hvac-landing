@@ -126,5 +126,5 @@ return [
     'ContactPhone' => 'هاتف الخدمة 24/7',
     'ContactEmailAddr' => 'البريد الإلكتروني',
     'ContactWorkHours' => 'أوقات العمل',
-    'ContactWorkHoursVal' => 'طوارئ 24 ساعة / 7 أيام في الأسبوع',
+    'ContactWorkHoursVal' => 'السبت - الخميس: 8:00 ص - 10:00 م (خدمة الطوارئ 24/7 طوال الأسبوع)',
 ];

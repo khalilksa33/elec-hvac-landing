@@ -143,7 +143,7 @@ $this->title = $isArabic ? ('أنظمة الصيانة والكهرباء | ' . 
 <div class="compliance-bar text-center">
     <div class="container d-flex flex-wrap justify-content-center align-items-center gap-4">
         <span><i class="bi bi-check-circle-fill text-success me-1"></i> <?= $isArabic ? 'ترخيص رسمي معتمد #' : 'Official Certified License #' ?><?= Html::encode($companyPermit) ?></span>
-        <span><i class="bi bi-currency-dollar text-warning me-1"></i> Upfront Transparent Pricing (No Hidden Fees)</span>
+        <span><i class="bi bi-cash-stack text-warning me-1"></i> Upfront Transparent Pricing (No Hidden Fees)</span>
         <span><i class="bi bi-award-fill text-info me-1"></i> EPA Certified HVAC Engineers & Electricians</span>
         <span><i class="bi bi-telephone-fill text-primary me-1"></i> <?= $isArabic ? 'الخط الساخن 24/7: ' : '24/7 Hotline: ' ?><?= Html::encode($companyPhone) ?></span>
     </div>
@@ -273,8 +273,8 @@ $this->title = $isArabic ? ('أنظمة الصيانة والكهرباء | ' . 
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
                     <div class="card-header bg-primary text-white py-3 text-center">
-                        <h5 class="m-0 fw-bold">Emergency AC Repair</h5>
-                        <div class="display-6 fw-extrabold my-2">$79 <span class="fs-6 fw-normal">Diagnostic Fee (Waived with Repair)</span></div>
+                        <h5 class="m-0 fw-bold"><?= $isArabic ? 'إصلاح وأعطال التكييف' : 'Emergency AC Repair' ?></h5>
+                        <div class="display-6 fw-extrabold my-2"><?= $isArabic ? '79 ر.س' : '79 SAR' ?> <span class="fs-6 fw-normal"><?= $isArabic ? 'رسوم الفحص (تُلغى عند الإصلاح)' : 'Diagnostic Fee (Waived with Repair)' ?></span></div>
                     </div>
                     <div class="card-body p-4">
                         <ul class="list-unstyled">
@@ -285,17 +285,17 @@ $this->title = $isArabic ? ('أنظمة الصيانة والكهرباء | ' . 
                         </ul>
                     </div>
                     <div class="card-footer bg-white border-0 p-4 pt-0">
-                        <a href="tel:<?= $cleanPhone ?>" class="btn btn-outline-primary w-100 rounded-3 fw-bold">Book Repair Now</a>
+                        <a href="tel:<?= $cleanPhone ?>" class="btn btn-outline-primary w-100 rounded-3 fw-bold"><?= $isArabic ? 'احجز موعد إصلاح الآن' : 'Book Repair Now' ?></a>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="card h-100 border-primary shadow-lg rounded-4 overflow-hidden style-popular" style="border-width: 2px;">
-                    <div class="bg-primary text-white text-center py-1 fw-bold extra-small text-uppercase tracking-wider">Most Popular for Homeowners</div>
+                    <div class="bg-primary text-white text-center py-1 fw-bold extra-small text-uppercase tracking-wider"><?= $isArabic ? 'الباقة الأكثر طلباً للمنازل' : 'Most Popular for Homeowners' ?></div>
                     <div class="card-header bg-dark text-white py-3 text-center">
-                        <h5 class="m-0 fw-bold text-warning">Annual HVAC Maintenance</h5>
-                        <div class="display-6 fw-extrabold my-2 text-white">$149 <span class="fs-6 fw-normal">/ Unit per year</span></div>
+                        <h5 class="m-0 fw-bold text-warning"><?= $isArabic ? 'عقد الصيانة السنوية' : 'Annual HVAC Maintenance' ?></h5>
+                        <div class="display-6 fw-extrabold my-2 text-white"><?= $isArabic ? '149 ر.س' : '149 SAR' ?> <span class="fs-6 fw-normal"><?= $isArabic ? '/ لكل وحدة سنوياً' : '/ Unit per year' ?></span></div>
                     </div>
                     <div class="card-body p-4">
                         <ul class="list-unstyled">

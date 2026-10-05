@@ -153,7 +153,7 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                                 <div class="text-success extra-small"><i class="bi bi-arrow-up-right me-1"></i> <?= $isArabic ? '+32.4% زيادة سنوية' : '+32.4% YoY Growth' ?></div>
                             </div>
                             <div class="p-3 bg-warning bg-opacity-20 text-warning rounded-4 fs-2">
-                                <i class="bi bi-currency-dollar"></i>
+                                <i class="bi bi-cash-coin"></i>
                             </div>
                         </div>
                     </div>

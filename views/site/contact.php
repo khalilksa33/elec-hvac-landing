@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div>
                                     <h4 class="fw-bold text-dark mb-3 pb-2 border-bottom">
                                         <i class="bi bi-building me-2 text-primary"></i>
-                                        <?= $isArabic ? Html::encode($company['name_ar'] ?? '') : Html::encode($company['name_en'] ?? '') ?>
+                                        <?= Html::encode(($isArabic ? ($company['name_ar'] ?? '') : ($company['name_en'] ?? '')) ?: ($company['name_ar'] ?? $company['name_en'] ?? '')) ?>
                                     </h4>
 
                                     <div class="p-3 bg-white rounded-3 border mb-4 text-muted">
@@ -150,7 +150,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </div>
                                         <div>
                                             <h6 class="fw-bold text-dark m-0"><?= Yii::t('app', 'ContactWorkHours') ?></h6>
-                                            <p class="text-muted small m-0"><?= Yii::t('app', 'ContactWorkHoursVal') ?></p>
+                                            <p class="text-muted small m-0">
+                                                <?= $isArabic ? 'السبت - الخميس: 8:00 ص - 10:00 م' : 'Sat – Thu: 8:00 AM – 10:00 PM' ?><br>
+                                                <span class="badge bg-success-subtle text-success fw-bold px-2 py-1 rounded-pill mt-1">
+                                                    <i class="bi bi-shield-check me-1"></i><?= $isArabic ? 'طوارئ 24/7 طوال الأسبوع' : '24/7 Emergency Dispatch' ?>
+                                                </span>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
