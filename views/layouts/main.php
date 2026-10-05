@@ -76,7 +76,6 @@ $addressStr = ($company['building_no'] ?? '7420') . ' '
             ['label' => Yii::t('app', 'ERP Portal'), 'url' => ['/site/erp-dashboard']],
             ['label' => Yii::t('app', 'Contact Us'), 'url' => ['/site/contact']],
             ['label' => $langBtnText, 'url' => $langSwitchUrl, 'linkOptions' => ['class' => 'btn btn-sm btn-outline-info text-white fw-bold px-3 ms-lg-1 rounded-pill']],
-            ['label' => ($isArabic ? 'اتصل الآن: ' : 'Call Us: ') . Html::encode($companyPhone), 'url' => 'tel:' . $cleanPhone, 'linkOptions' => ['class' => 'btn btn-sm btn-outline-warning text-white fw-bold px-3 ms-lg-1 rounded-pill']],
             Yii::$app->user->isGuest
                 ? ['label' => '<i class="bi bi-box-arrow-in-right me-1"></i> ' . Yii::t('app', 'Tech Login'), 'url' => ['/site/login'], 'encode' => false, 'linkOptions' => ['class' => 'btn btn-sm btn-accent ms-lg-1 text-white']]
                 : '<li class="nav-item ms-lg-2">'
