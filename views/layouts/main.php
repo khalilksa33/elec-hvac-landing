@@ -28,11 +28,26 @@ if ($isArabic) {
 }
 $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
 ?>
+<?php
+$company = Yii::$app->params['company'] ?? [];
+$brandTitle = Yii::$app->params['brandTitle'] ?? Yii::t('app', 'BrandTitle');
+$companyPhone = $company['phone'] ?? '(800) 555-4822';
+$companyWhatsapp = $company['whatsapp'] ?? '+966500000000';
+$companyEmail = $company['email'] ?? 'hello@dynapulsar.com';
+$companyPermit = $company['permit_number'] ?? 'HVAC-EL-2026-8894';
+$cleanPhone = preg_replace('/[^0-9+]/', '', $companyPhone);
+$cleanWhatsapp = preg_replace('/[^0-9]/', '', $companyWhatsapp);
+
+$addressStr = ($company['building_no'] ?? '7420') . ' ' 
+    . ($isArabic ? ($company['street_ar'] ?? '') : ($company['street_en'] ?? '')) . ', ' 
+    . ($isArabic ? ($company['district_ar'] ?? '') : ($company['district_en'] ?? '')) . ', ' 
+    . ($isArabic ? ($company['city_ar'] ?? '') : ($company['city_en'] ?? ''));
+?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" dir="<?= $dir ?>" class="h-100">
 <head>
-    <title><?= Html::encode($this->title) ?> | <?= Yii::t('app', 'BrandTitle') ?></title>
+    <title><?= Html::encode($this->title) ?> | <?= Html::encode($brandTitle) ?></title>
     <?php $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100" dir="<?= $dir ?>">
@@ -41,7 +56,7 @@ $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font
 <header id="header">
     <?php
     NavBar::begin([
-        'brandLabel' => '<div class="navbar-brand-text text-white"><i class="bi bi-snow2 text-info me-2"></i>' . Yii::t('app', 'BrandTitle') . '</div>',
+        'brandLabel' => '<div class="navbar-brand-text text-white"><i class="bi bi-snow2 text-info me-2"></i>' . Html::encode($brandTitle) . '</div>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => ['class' => 'navbar-expand-lg navbar-dark navbar-custom fixed-top shadow-sm px-3 px-lg-4'],
         'containerOptions' => ['class' => 'container-fluid px-0']
@@ -61,7 +76,7 @@ $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font
             ['label' => Yii::t('app', 'ERP Portal'), 'url' => ['/site/erp-dashboard']],
             ['label' => Yii::t('app', 'Contact Us'), 'url' => ['/site/contact']],
             ['label' => $langBtnText, 'url' => $langSwitchUrl, 'linkOptions' => ['class' => 'btn btn-sm btn-outline-info text-white fw-bold px-3 ms-lg-1 rounded-pill']],
-            ['label' => Yii::t('app', 'Call Us'), 'url' => 'tel:8005554822', 'linkOptions' => ['class' => 'btn btn-sm btn-outline-warning text-white fw-bold px-3 ms-lg-1 rounded-pill']],
+            ['label' => ($isArabic ? 'اتصل الآن: ' : 'Call Us: ') . Html::encode($companyPhone), 'url' => 'tel:' . $cleanPhone, 'linkOptions' => ['class' => 'btn btn-sm btn-outline-warning text-white fw-bold px-3 ms-lg-1 rounded-pill']],
             Yii::$app->user->isGuest
                 ? ['label' => '<i class="bi bi-box-arrow-in-right me-1"></i> ' . Yii::t('app', 'Tech Login'), 'url' => ['/site/login'], 'encode' => false, 'linkOptions' => ['class' => 'btn btn-sm btn-accent ms-lg-1 text-white']]
                 : '<li class="nav-item ms-lg-2">'
@@ -100,7 +115,7 @@ $mainPaddingClass = $isHomePage ? 'pt-0' : 'pt-5 mt-4';
     <div class="container">
         <div class="row g-4">
             <div class="col-lg-4">
-                <h5 class="fw-bold text-white mb-3"><i class="bi bi-snow2 text-info me-2"></i><?= Yii::t('app', 'BrandTitle') ?></h5>
+                <h5 class="fw-bold text-white mb-3"><i class="bi bi-snow2 text-info me-2"></i><?= Html::encode($brandTitle) ?></h5>
                 <p class="text-secondary small"><?= Yii::t('app', 'FooterAbout') ?></p>
                 <div class="d-flex gap-3 text-secondary">
                     <span class="small"><i class="bi bi-shield-check text-success fs-5 me-1"></i> <?= Yii::t('app', 'LicensedTechs') ?></span>
@@ -127,16 +142,16 @@ $mainPaddingClass = $isHomePage ? 'pt-0' : 'pt-5 mt-4';
             </div>
             <div class="col-lg-3">
                 <h6 class="fw-bold text-white mb-3"><?= Yii::t('app', 'Contact Us') ?></h6>
-                <p class="text-secondary small mb-1"><i class="bi bi-geo-alt text-danger me-2"></i> 100 HVAC Commerce Way, Suite 400</p>
-                <p class="text-secondary small mb-1"><i class="bi bi-telephone text-success me-2"></i> (800) 555-4822</p>
-                <p class="text-secondary small mb-1"><i class="bi bi-envelope text-info me-2"></i> service@climatetech-hvac.com</p>
-                <p class="text-secondary small"><i class="bi bi-award text-warning me-2"></i> <?= Yii::t('app', 'LicenseNo') ?></p>
+                <p class="text-secondary small mb-1"><i class="bi bi-geo-alt text-danger me-2"></i> <?= Html::encode($addressStr) ?></p>
+                <p class="text-secondary small mb-1"><i class="bi bi-telephone text-success me-2"></i> <?= Html::encode($companyPhone) ?></p>
+                <p class="text-secondary small mb-1"><i class="bi bi-envelope text-info me-2"></i> <?= Html::encode($companyEmail) ?></p>
+                <p class="text-secondary small"><i class="bi bi-award text-warning me-2"></i> <?= $isArabic ? 'ترخيص رقم ' : 'License #' ?><?= Html::encode($companyPermit) ?></p>
             </div>
         </div>
         <hr class="border-secondary my-4">
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-start text-secondary small">
-                &copy; <?= date('Y') ?> <?= Yii::t('app', 'CopyrightText') ?>
+                &copy; <?= date('Y') ?> <?= Html::encode($brandTitle) ?>. <?= $isArabic ? 'جميع الحقوق محفوظة.' : 'All rights reserved.' ?>
             </div>
             <div class="col-md-6 text-center text-md-end text-secondary small">
                 Google Ads Compliant Landing Page & Built-in Enterprise ERP Engine
@@ -147,11 +162,11 @@ $mainPaddingClass = $isHomePage ? 'pt-0' : 'pt-5 mt-4';
 
 <!-- Floating WhatsApp & Call Quick Action Widgets -->
 <div class="floating-widget-container">
-    <a href="https://wa.me/966500000000?text=مرحباً،%20أحتاج%20إلى%20خدمة%20صيانة/تركيب%20تكييف" target="_blank" class="floating-btn floating-whatsapp" aria-label="WhatsApp Us">
+    <a href="https://wa.me/<?= $cleanWhatsapp ?>?text=مرحباً،%20أحتاج%20إلى%20خدمة%20صيانة/تركيب%20تكييف" target="_blank" class="floating-btn floating-whatsapp" aria-label="WhatsApp Us">
         <i class="bi bi-whatsapp"></i>
         <span class="floating-tooltip"><?= $isArabic ? 'واتساب مباشر' : 'WhatsApp Us' ?></span>
     </a>
-    <a href="tel:8005554822" class="floating-btn floating-call" aria-label="Call Direct">
+    <a href="tel:<?= $cleanPhone ?>" class="floating-btn floating-call" aria-label="Call Direct">
         <i class="bi bi-telephone-fill"></i>
         <span class="floating-tooltip"><?= $isArabic ? 'اتصال مباشر' : 'Call Direct' ?></span>
     </a>

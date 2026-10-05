@@ -9,6 +9,7 @@ use yii\bootstrap5\Html;
 use yii\captcha\Captcha;
 
 $isArabic = strpos(Yii::$app->language, 'ar') === 0;
+$company = $company ?? Yii::$app->params['company'] ?? [];
 $this->title = Yii::t('app', 'ContactTitle');
 $this->params['breadcrumbs'][] = $this->title;
 ?>

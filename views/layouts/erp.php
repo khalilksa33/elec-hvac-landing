@@ -26,11 +26,15 @@ if ($isArabic) {
 $this->registerCssFile('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
 $this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', ['position' => \yii\web\View::POS_END]);
 ?>
+<?php
+$company = Yii::$app->params['company'] ?? [];
+$brandTitle = Yii::$app->params['brandTitle'] ?? ($isArabic ? 'شركة التكييف والكهرباء' : 'ClimateTech Enterprise');
+?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" dir="<?= $dir ?>" class="h-100">
 <head>
-    <title><?= Html::encode($this->title) ?> | <?= $isArabic ? 'بوابة إدارة التكييف والكهرباء (ERP)' : 'ClimateTech ERP Management Console' ?></title>
+    <title><?= Html::encode($this->title) ?> | <?= Html::encode($brandTitle) ?> ERP</title>
     <?php $this->head() ?>
     <style>
         .erp-sidebar {
@@ -55,7 +59,7 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/boot
         <div class="container-fluid px-0">
             <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-white fs-5" href="<?= \yii\helpers\Url::to(['/site/erp-dashboard']) ?>">
                 <span class="p-2 bg-primary bg-opacity-20 rounded-3 text-info"><i class="bi bi-cpu-fill"></i></span>
-                <span><?= $isArabic ? 'نظام إدارة التكييف والكهرباء ERP' : 'ClimateTech Enterprise ERP' ?></span>
+                <span><?= Html::encode($brandTitle) ?> (ERP)</span>
             </a>
 
             <div class="d-flex align-items-center gap-2 ms-auto">
@@ -96,7 +100,7 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/boot
     <div class="container-fluid px-4">
         <div class="d-flex flex-wrap justify-content-between align-items-center extra-small text-secondary">
             <div>
-                &copy; <?= date('Y') ?> ClimateTech Enterprise ERP Platform | ZATCA Phase 2 E-Invoicing Certified
+                &copy; <?= date('Y') ?> <?= Html::encode($brandTitle) ?> ERP | ZATCA Phase 2 E-Invoicing Certified
             </div>
             <div>
                 <?= $isArabic ? 'نظام إدارة البلاغات، الفواتير الضريبية، والمستخدمين' : 'Dispatch, ZATCA Invoicing & RBAC Portal' ?>

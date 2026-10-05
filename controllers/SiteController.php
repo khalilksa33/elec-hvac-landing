@@ -57,6 +57,13 @@ class SiteController extends Controller
             Yii::$app->language = 'ar-SA';
         }
 
+        $isArabic = strpos(Yii::$app->language, 'ar') === 0;
+        $company = $this->getCompanySettings();
+        Yii::$app->params['company'] = $company;
+        Yii::$app->params['brandTitle'] = $isArabic
+            ? (!empty($company['name_ar']) ? $company['name_ar'] : 'شركة كلايميت تك لأنظمة التكييف والكهرباء المحدودة')
+            : (!empty($company['name_en']) ? $company['name_en'] : 'ClimateTech Electrical & HVAC Solutions Co. Ltd.');
+
         return parent::beforeAction($action);
     }
 

@@ -4,7 +4,14 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
-$this->title = Yii::t('app', 'SystemsTitle');
+$company = Yii::$app->params['company'] ?? [];
+$brandTitle = Yii::$app->params['brandTitle'] ?? Yii::t('app', 'BrandTitle');
+$companyPhone = $company['phone'] ?? '(800) 555-4822';
+$companyPermit = $company['permit_number'] ?? 'HVAC-EL-2026-8894';
+$cleanPhone = preg_replace('/[^0-9+]/', '', $companyPhone);
+$isArabic = strpos(Yii::$app->language, 'ar') === 0;
+
+$this->title = $isArabic ? ('أنظمة الصيانة والكهرباء | ' . $brandTitle) : ('HVAC & Electrical Systems | ' . $brandTitle);
 ?>
 
 <!-- Hero Section -->
@@ -16,7 +23,7 @@ $this->title = Yii::t('app', 'SystemsTitle');
                     <i class="bi bi-patch-check-fill text-warning"></i> <?= Yii::t('app', 'HeroBadge') ?>
                 </div>
                 <h1 class="hero-title">
-                    <?= Yii::t('app', 'HeroTitlePrefix') ?> <span><?= Yii::t('app', 'HeroTitleBrand') ?></span>
+                    <?= Yii::t('app', 'HeroTitlePrefix') ?> <span><?= Html::encode($brandTitle) ?></span>
                 </h1>
                 <p class="hero-lead">
                     <?= Yii::t('app', 'HeroLead') ?>
@@ -47,8 +54,8 @@ $this->title = Yii::t('app', 'SystemsTitle');
                 </div>
 
                 <div class="d-flex gap-3">
-                    <a href="tel:8005554822" class="btn btn-accent btn-lg text-white">
-                        <i class="bi bi-telephone-outbound-fill me-2"></i> <?= Yii::t('app', 'CallNowBtn') ?>
+                    <a href="tel:<?= $cleanPhone ?>" class="btn btn-accent btn-lg text-white">
+                        <i class="bi bi-telephone-outbound-fill me-2"></i> <?= ($isArabic ? 'اتصل الآن: ' : 'Call Now: ') . Html::encode($companyPhone) ?>
                     </a>
                     <a href="#services" class="btn btn-outline-light btn-lg rounded-3">
                         <i class="bi bi-tools me-2"></i> <?= Yii::t('app', 'ExploreServicesBtn') ?>
@@ -135,10 +142,10 @@ $this->title = Yii::t('app', 'SystemsTitle');
 <!-- Google Ads Compliance & Trust Banner -->
 <div class="compliance-bar text-center">
     <div class="container d-flex flex-wrap justify-content-center align-items-center gap-4">
-        <span><i class="bi bi-check-circle-fill text-success me-1"></i> Official Certified License #HVAC-EL-2026-8894</span>
+        <span><i class="bi bi-check-circle-fill text-success me-1"></i> <?= $isArabic ? 'ترخيص رسمي معتمد #' : 'Official Certified License #' ?><?= Html::encode($companyPermit) ?></span>
         <span><i class="bi bi-currency-dollar text-warning me-1"></i> Upfront Transparent Pricing (No Hidden Fees)</span>
         <span><i class="bi bi-award-fill text-info me-1"></i> EPA Certified HVAC Engineers & Electricians</span>
-        <span><i class="bi bi-telephone-fill text-primary me-1"></i> 24/7 Hotline: (800) 555-4822</span>
+        <span><i class="bi bi-telephone-fill text-primary me-1"></i> <?= $isArabic ? 'الخط الساخن 24/7: ' : '24/7 Hotline: ' ?><?= Html::encode($companyPhone) ?></span>
     </div>
 </div>
 
@@ -278,7 +285,7 @@ $this->title = Yii::t('app', 'SystemsTitle');
                         </ul>
                     </div>
                     <div class="card-footer bg-white border-0 p-4 pt-0">
-                        <a href="tel:8005554822" class="btn btn-outline-primary w-100 rounded-3 fw-bold">Book Repair Now</a>
+                        <a href="tel:<?= $cleanPhone ?>" class="btn btn-outline-primary w-100 rounded-3 fw-bold">Book Repair Now</a>
                     </div>
                 </div>
             </div>
@@ -300,7 +307,7 @@ $this->title = Yii::t('app', 'SystemsTitle');
                         </ul>
                     </div>
                     <div class="card-footer bg-white border-0 p-4 pt-0">
-                        <a href="tel:8005554822" class="btn btn-accent w-100 rounded-3 fw-bold text-white">Get Protection Plan</a>
+                        <a href="tel:<?= $cleanPhone ?>" class="btn btn-accent w-100 rounded-3 fw-bold text-white">Get Protection Plan</a>
                     </div>
                 </div>
             </div>
