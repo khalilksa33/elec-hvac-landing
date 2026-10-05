@@ -1465,6 +1465,18 @@ function submitNewUser(e) {
         '<td><button class="btn btn-sm btn-outline-secondary">Edit</button></td>';
     tbody.prepend(tr);
 
+    // If added as Field Technician, dynamically append to technician dispatch dropdown
+    if (role === 'Field Technician' || role.indexOf('Technician') !== -1) {
+        var select = document.getElementById('assign-tech-select');
+        if (select) {
+            var opt = document.createElement('option');
+            opt.value = name;
+            opt.innerText = name + ' (Newly Registered Tech)';
+            opt.selected = true;
+            select.appendChild(opt);
+        }
+    }
+
     var modalEl = document.getElementById('newUserModal');
     var modal = bootstrap.Modal.getInstance(modalEl);
     if (modal) modal.hide();
