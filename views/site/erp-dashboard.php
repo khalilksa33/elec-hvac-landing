@@ -799,6 +799,11 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                         </div>
                     </div>
 
+                    <!-- Live Amount in Words -->
+                    <div class="p-2 bg-light border rounded-3 mb-3 extra-small">
+                        <div class="fw-bold text-dark mb-1"><i class="bi bi-chat-quote me-1 text-success"></i> <?= $isArabic ? 'المبلغ بالكلمات:' : 'Amount in Words (AR):' ?> <span id="inv-words-ar" class="text-primary fw-bold">فقط صفر ريال لا غير</span></div>
+                        <div class="text-muted"><i class="bi bi-translate me-1 text-info"></i> <?= $isArabic ? 'بالإنجليزية:' : 'In Words (EN):' ?> <span id="inv-words-en" class="fw-bold">Zero Saudi Riyals Only</span></div>
+                    </div>
                     <button type="submit" class="btn btn-success w-100 fw-bold py-2 fs-6 shadow-sm">
                         <i class="bi bi-qr-code me-1"></i> <?= $isArabic ? 'إصدار الفاتورة وتشفير QR (ZATCA)' : 'Generate & Stamp ZATCA Invoice' ?>
                     </button>
@@ -896,8 +901,12 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                             </div>
                         </div>
                         <div class="col-md-5 text-end">
-                            <div class="text-muted extra-small">الإجمالي النهائي المستحق:</div>
-                            <div class="display-6 fw-extrabold text-success" id="pdf-total-display">517.50 SAR</div>
+                            <div class="text-muted extra-small">الإجمالي النهائي المستحق (Net Total):</div>
+                            <div class="display-6 fw-extrabold text-success mb-1" id="pdf-total-display">517.50 SAR</div>
+                            <div class="p-2 bg-white rounded-3 border text-start extra-small border-success border-opacity-25 shadow-sm">
+                                <div class="fw-bold text-dark mb-1"><i class="bi bi-chat-quote-fill me-1 text-success"></i> <span id="pdf-total-words-ar">فقط خمسمائة وسبعة عشر ريالاً سعودياً وخمسون هللة لا غير</span></div>
+                                <div class="text-muted extra-small"><i class="bi bi-translate me-1 text-primary"></i> <span id="pdf-total-words-en">Five Hundred Seventeen Saudi Riyals and Fifty Halalas Only</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1107,6 +1116,88 @@ function removeInvoiceItemRow(btn) {
     }
 }
 
+function numberToWordsArabic(amount) {
+    if (isNaN(amount) || amount <= 0) return 'فقط صفر ريال لا غير';
+    var riyals = Math.floor(amount);
+    var halalas = Math.round((amount - riyals) * 100);
+
+    function convertNumber(n) {
+        if (n === 0) return '';
+        var units = ['', 'واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة'];
+        var tens = ['', 'عشرة', 'عشرون', 'ثلاثون', 'أربعون', 'خمسون', 'ستون', 'سبعون', 'ثمانون', 'تسعون'];
+        var teens = ['عشرة', 'أحد عشر', 'إثنا عشر', 'ثلاثة عشر', 'أربعة عشر', 'خمسة عشر', 'ستة عشر', 'سبعة عشر', 'ثمانية عشر', 'تسعة عشر'];
+        var hundreds = ['', 'مائة', 'مائتان', 'ثلاثمائة', 'أربعمائة', 'خمسعمائة', 'ستمائة', 'سبعمائة', 'ثمانمائة', 'تسعمائة'];
+
+        if (n < 10) return units[n];
+        if (n >= 10 && n < 20) return teens[n - 10];
+        if (n >= 20 && n < 100) {
+            var u = n % 10;
+            var t = Math.floor(n / 10);
+            return u === 0 ? tens[t] : units[u] + ' و' + tens[t];
+        }
+        if (n >= 100 && n < 1000) {
+            var h = Math.floor(n / 100);
+            var rem = n % 100;
+            return rem === 0 ? hundreds[h] : hundreds[h] + ' و' + convertNumber(rem);
+        }
+        if (n >= 1000 && n < 1000000) {
+            var th = Math.floor(n / 1000);
+            var remTh = n % 1000;
+            var thWord = th === 1 ? 'ألف' : (th === 2 ? 'ألفان' : (th >= 3 && th <= 10 ? convertNumber(th) + ' آلاف' : convertNumber(th) + ' ألفاً'));
+            return remTh === 0 ? thWord : thWord + ' و' + convertNumber(remTh);
+        }
+        return n.toString();
+    }
+
+    var rText = convertNumber(riyals);
+    var text = rText ? (rText + (riyals === 1 ? ' ريال سعودي' : ' ريالاً سعودياً')) : '';
+    if (halalas > 0) {
+        var hText = convertNumber(halalas);
+        text += (text ? ' و' : '') + hText + ' هللة';
+    }
+    return text ? ('فقط ' + text + ' لا غير') : 'فقط صفر ريال لا غير';
+}
+
+function numberToWordsEnglish(amount) {
+    if (isNaN(amount) || amount <= 0) return 'Zero Saudi Riyals Only';
+    var riyals = Math.floor(amount);
+    var halalas = Math.round((amount - riyals) * 100);
+
+    function convertNumber(n) {
+        if (n === 0) return '';
+        var units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+        var tens = ['', 'Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        var teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+
+        if (n < 10) return units[n];
+        if (n >= 10 && n < 20) return teens[n - 10];
+        if (n >= 20 && n < 100) {
+            var u = n % 10;
+            var t = Math.floor(n / 10);
+            return u === 0 ? tens[t] : tens[t] + ' ' + units[u];
+        }
+        if (n >= 100 && n < 1000) {
+            var h = Math.floor(n / 100);
+            var rem = n % 100;
+            return rem === 0 ? units[h] + ' Hundred' : units[h] + ' Hundred ' + convertNumber(rem);
+        }
+        if (n >= 1000 && n < 1000000) {
+            var th = Math.floor(n / 1000);
+            var remTh = n % 1000;
+            return remTh === 0 ? convertNumber(th) + ' Thousand' : convertNumber(th) + ' Thousand ' + convertNumber(remTh);
+        }
+        return n.toString();
+    }
+
+    var rText = convertNumber(riyals);
+    var text = rText ? (rText + (riyals === 1 ? ' Saudi Riyal' : ' Saudi Riyals')) : '';
+    if (halalas > 0) {
+        var hText = convertNumber(halalas);
+        text += (text ? ' and ' : '') + hText + (halalas === 1 ? ' Halala' : ' Halalas');
+    }
+    return text ? (text + ' Only') : 'Zero Saudi Riyals Only';
+}
+
 function recalcInvoiceTotals() {
     var rows = document.querySelectorAll('#invoice-items-tbody .inv-item-row');
     var totalSub = 0;
@@ -1124,10 +1215,14 @@ function recalcInvoiceTotals() {
     var subEl = document.getElementById('inv-subtotal');
     var vatEl = document.getElementById('inv-vat');
     var netEl = document.getElementById('inv-net-display');
+    var wordsArEl = document.getElementById('inv-words-ar');
+    var wordsEnEl = document.getElementById('inv-words-en');
 
     if (subEl) subEl.value = totalSub.toFixed(2) + ' SAR';
     if (vatEl) vatEl.value = vat.toFixed(2) + ' SAR';
     if (netEl) netEl.value = net.toFixed(2) + ' SAR';
+    if (wordsArEl) wordsArEl.innerText = numberToWordsArabic(net);
+    if (wordsEnEl) wordsEnEl.innerText = numberToWordsEnglish(net);
 }
 
 function openNewInvoiceModal() {
@@ -1211,6 +1306,11 @@ function viewPdfInvoice(num, fallbackName, fallbackSub, fallbackVat, fallbackNet
     document.getElementById('pdf-inv-num').innerText = num;
     document.getElementById('pdf-cust-name').innerText = name;
     document.getElementById('pdf-total-display').innerText = total.toFixed(2) + ' SAR';
+    
+    var wordsArEl = document.getElementById('pdf-total-words-ar');
+    var wordsEnEl = document.getElementById('pdf-total-words-en');
+    if (wordsArEl) wordsArEl.innerText = numberToWordsArabic(total);
+    if (wordsEnEl) wordsEnEl.innerText = numberToWordsEnglish(total);
 
     var tbody = document.getElementById('pdf-items-tbody');
     if (tbody) {
