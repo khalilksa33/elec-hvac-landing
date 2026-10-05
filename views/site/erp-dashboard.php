@@ -817,27 +817,46 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
 <div class="modal fade" id="pdfInvoiceModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg rounded-4">
-            <div class="modal-header bg-primary text-white rounded-top-4 no-print">
-                <h5 class="modal-title fw-bold"><i class="bi bi-file-earmark-pdf me-2"></i><?= $isArabic ? 'معاينة وطباعة الفاتورة الضريبية القياسية A4' : 'Standard A4 ZATCA Tax Invoice Preview' ?></h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-primary text-white rounded-top-4 no-print d-flex align-items-center justify-content-between">
+                <h5 class="modal-title fw-bold m-0"><i class="bi bi-file-earmark-pdf me-2"></i><?= $isArabic ? 'معاينة وطباعة الفاتورة الضريبية ZATCA' : 'ZATCA Tax Invoice Preview' ?></h5>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn <?= $isArabic ? 'btn-light text-primary fw-bold' : 'btn-outline-light' ?> btn-inv-lang" id="btn-inv-lang-ar" onclick="switchInvoiceLanguage('ar')">🇸🇦 بالعربية</button>
+                        <button type="button" class="btn <?= !$isArabic ? 'btn-light text-primary fw-bold' : 'btn-outline-light' ?> btn-inv-lang" id="btn-inv-lang-en" onclick="switchInvoiceLanguage('en')">🌐 In English</button>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
             </div>
-            <div class="modal-body p-4 bg-white printable-area" id="a4-invoice-content">
+            <div class="modal-body p-4 bg-white printable-area" id="a4-invoice-content" dir="<?= $isArabic ? 'rtl' : 'ltr' ?>">
                 <div class="border p-4 rounded-3 bg-white" style="font-family: Arial, sans-serif;">
                     <!-- Invoice Header -->
                     <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
                         <div>
-                            <h4 class="fw-bold text-dark mb-1"><?= $companyNameAr ?></h4>
-                            <div class="text-muted small"><?= $companyNameEn ?></div>
-                            <div class="extra-small text-muted mt-2">
-                                <div><strong>الرقم الضريبي (VAT):</strong> <?= $vatNum ?></div>
-                                <div><strong>السجل التجاري (CR):</strong> <?= $crNum ?> | <strong>الترخيص:</strong> <?= $permitNum ?></div>
-                                <div><strong>العنوان:</strong> <?= $bldg ?> <?= $streetAr ?> - <?= $distAr ?> - <?= $cityAr ?></div>
+                            <!-- Arabic Company Info Header -->
+                            <div class="inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">
+                                <h4 class="fw-bold text-dark mb-1"><?= $companyNameAr ?></h4>
+                                <div class="extra-small text-muted mt-2">
+                                    <div><strong>الرقم الضريبي (VAT):</strong> <?= $vatNum ?></div>
+                                    <div><strong>السجل التجاري (CR):</strong> <?= $crNum ?> | <strong>الترخيص:</strong> <?= $permitNum ?></div>
+                                    <div><strong>العنوان الوطني:</strong> <?= $bldg ?> <?= $streetAr ?> - <?= $distAr ?> - <?= $cityAr ?></div>
+                                </div>
+                            </div>
+                            <!-- English Company Info Header -->
+                            <div class="inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">
+                                <h4 class="fw-bold text-dark mb-1"><?= $companyNameEn ?></h4>
+                                <div class="extra-small text-muted mt-2">
+                                    <div><strong>VAT Number:</strong> <?= $vatNum ?></div>
+                                    <div><strong>CR Number:</strong> <?= $crNum ?> | <strong>License #:</strong> <?= $permitNum ?></div>
+                                    <div><strong>National Address:</strong> Bldg <?= $bldg ?>, <?= $streetEn ?>, <?= $distEn ?>, <?= $cityEn ?></div>
+                                </div>
                             </div>
                         </div>
                         <div class="text-end">
-                            <span class="badge bg-success fs-6 mb-2">فاتورة ضريبية مبسطة ZATCA</span>
+                            <span class="badge bg-success fs-6 mb-2 inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">فاتورة ضريبية مبسطة ZATCA</span>
+                            <span class="badge bg-success fs-6 mb-2 inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">ZATCA Simplified Tax Invoice</span>
                             <h5 class="fw-bold text-primary m-0" id="pdf-inv-num">INV-2026-00891</h5>
-                            <div class="extra-small text-muted mt-1">تاريخ الإصدار: <?= date('Y-m-d H:i') ?></div>
+                            <div class="extra-small text-muted mt-1 inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">تاريخ الإصدار: <?= date('Y-m-d H:i') ?></div>
+                            <div class="extra-small text-muted mt-1 inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">Issue Date: <?= date('Y-m-d H:i') ?></div>
                         </div>
                     </div>
 
@@ -845,14 +864,20 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                     <div class="row g-3 mb-4">
                         <div class="col-6">
                             <div class="p-3 bg-light rounded-3 border">
-                                <div class="extra-small text-muted fw-bold">اسم العميل:</div>
+                                <div class="extra-small text-muted fw-bold inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">اسم العميل:</div>
+                                <div class="extra-small text-muted fw-bold inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">Customer Name:</div>
                                 <div class="fw-bold text-dark fs-6" id="pdf-cust-name">سعد العتيبي</div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="p-3 bg-light rounded-3 border text-end">
-                                <div class="extra-small text-muted fw-bold">حالة الفاتورة والربط:</div>
-                                <div class="fw-bold text-success fs-6"><i class="bi bi-shield-check me-1"></i> مدفوعة (ZATCA Verified)</div>
+                                <div class="extra-small text-muted fw-bold inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">حالة الفاتورة والربط:</div>
+                                <div class="extra-small text-muted fw-bold inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">Compliance & Payment Status:</div>
+                                <div class="fw-bold text-success fs-6">
+                                    <i class="bi bi-shield-check me-1"></i>
+                                    <span class="inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">مدفوعة (ZATCA Verified)</span>
+                                    <span class="inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">Paid (ZATCA Verified)</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -861,14 +886,23 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                     <div class="table-responsive mb-4">
                         <table class="table table-bordered align-middle extra-small mb-0">
                             <thead class="bg-light">
-                                <tr>
+                                <tr class="inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">
                                     <th style="width: 40px;">#</th>
-                                    <th><?= $isArabic ? 'الوصف / الخدمة' : 'Item Description / Service' ?></th>
-                                    <th style="width: 70px;"><?= $isArabic ? 'الكمية' : 'Qty' ?></th>
-                                    <th style="width: 110px;"><?= $isArabic ? 'سعر الوحدة' : 'Unit Price' ?></th>
-                                    <th style="width: 120px;"><?= $isArabic ? 'المبلغ (قبل الضريبة)' : 'Subtotal' ?></th>
-                                    <th style="width: 110px;"><?= $isArabic ? 'ضريبة (15%)' : 'VAT (15%)' ?></th>
-                                    <th style="width: 120px;"><?= $isArabic ? 'الإجمالي الصافي' : 'Total Net' ?></th>
+                                    <th>الوصف / الخدمة</th>
+                                    <th style="width: 70px;">الكمية</th>
+                                    <th style="width: 110px;">سعر الوحدة</th>
+                                    <th style="width: 120px;">المبلغ (قبل الضريبة)</th>
+                                    <th style="width: 110px;">ضريبة (15%)</th>
+                                    <th style="width: 120px;">الإجمالي الصافي</th>
+                                </tr>
+                                <tr class="inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">
+                                    <th style="width: 40px;">#</th>
+                                    <th>Item Description / Service</th>
+                                    <th style="width: 70px;">Qty</th>
+                                    <th style="width: 110px;">Unit Price</th>
+                                    <th style="width: 120px;">Subtotal (Excl. VAT)</th>
+                                    <th style="width: 110px;">VAT (15%)</th>
+                                    <th style="width: 120px;">Net Total</th>
                                 </tr>
                             </thead>
                             <tbody id="pdf-items-tbody">
@@ -885,7 +919,7 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                         </table>
                     </div>
 
-                    <!-- Footer ZATCA QR & Totals Block (Clean non-overlapping layout) -->
+                    <!-- Footer ZATCA QR & Totals Block -->
                     <div class="row align-items-center p-3 bg-light rounded-3 border g-3">
                         <div class="col-md-7">
                             <div class="d-flex align-items-center gap-3">
@@ -894,18 +928,24 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                                     <div class="extra-small text-dark fw-bold mt-1" style="font-size: 8px;">ZATCA STAMP</div>
                                 </div>
                                 <div class="extra-small text-muted">
-                                    <div class="fw-bold text-dark">رمز QR مشفر ومشفر إلكترونياً وفق معايير هيئة الزكاة (Phase 2)</div>
-                                    <div>Cryptographic Stamp Hash: 4a8e8f90c12e34bd7810fe90aa812f</div>
+                                    <div class="fw-bold text-dark inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">رمز QR مشفر ومختوم إلكترونياً وفق معايير هيئة الزكاة (Phase 2)</div>
+                                    <div class="fw-bold text-dark inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">Cryptographically Stamped QR Code per ZATCA Phase 2</div>
+                                    <div>Hash: 4a8e8f90c12e34bd7810fe90aa812f</div>
                                     <div>UUID: 3f2504e0-4f89-11d3-9a0c-0305e82c3301</div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-5 text-end">
-                            <div class="text-muted extra-small">الإجمالي النهائي المستحق (Net Total):</div>
+                            <div class="text-muted extra-small inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">الإجمالي النهائي المستحق:</div>
+                            <div class="text-muted extra-small inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">Grand Net Total Due:</div>
                             <div class="display-6 fw-extrabold text-success mb-1" id="pdf-total-display">517.50 SAR</div>
                             <div class="p-2 bg-white rounded-3 border text-start extra-small border-success border-opacity-25 shadow-sm">
-                                <div class="fw-bold text-dark mb-1"><i class="bi bi-chat-quote-fill me-1 text-success"></i> <span id="pdf-total-words-ar">فقط خمسمائة وسبعة عشر ريالاً سعودياً وخمسون هللة لا غير</span></div>
-                                <div class="text-muted extra-small"><i class="bi bi-translate me-1 text-primary"></i> <span id="pdf-total-words-en">Five Hundred Seventeen Saudi Riyals and Fifty Halalas Only</span></div>
+                                <div class="fw-bold text-dark inv-lang-ar" style="<?= $isArabic ? '' : 'display:none;' ?>">
+                                    <i class="bi bi-chat-quote-fill me-1 text-success"></i> <span id="pdf-total-words-ar">فقط خمسمائة وسبعة عشر ريالاً سعودياً وخمسون هللة لا غير</span>
+                                </div>
+                                <div class="fw-bold text-dark inv-lang-en" style="<?= !$isArabic ? '' : 'display:none;' ?>">
+                                    <i class="bi bi-chat-quote-fill me-1 text-success"></i> <span id="pdf-total-words-en">Five Hundred Seventeen Saudi Riyals and Fifty Halalas Only</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1292,6 +1332,36 @@ function submitNewInvoice(e) {
     alert('ZATCA Tax Invoice ' + invNum + ' generated and encrypted successfully with ' + items.length + ' item(s)!');
 }
 
+function switchInvoiceLanguage(lang) {
+    var isAr = (lang === 'ar');
+
+    var btnAr = document.getElementById('btn-inv-lang-ar');
+    var btnEn = document.getElementById('btn-inv-lang-en');
+    if (btnAr && btnEn) {
+        if (isAr) {
+            btnAr.className = 'btn btn-light text-primary fw-bold btn-inv-lang';
+            btnEn.className = 'btn btn-outline-light text-white btn-inv-lang';
+        } else {
+            btnAr.className = 'btn btn-outline-light text-white btn-inv-lang';
+            btnEn.className = 'btn btn-light text-primary fw-bold btn-inv-lang';
+        }
+    }
+
+    var pdfModal = document.getElementById('pdfInvoiceModal');
+    if (pdfModal) {
+        pdfModal.querySelectorAll('.inv-lang-ar').forEach(function(el) {
+            el.style.display = isAr ? '' : 'none';
+        });
+        pdfModal.querySelectorAll('.inv-lang-en').forEach(function(el) {
+            el.style.display = isAr ? 'none' : '';
+        });
+        var printContent = document.getElementById('a4-invoice-content');
+        if (printContent) {
+            printContent.setAttribute('dir', isAr ? 'rtl' : 'ltr');
+        }
+    }
+}
+
 function viewPdfInvoice(num, fallbackName, fallbackSub, fallbackVat, fallbackNet) {
     var invData = window.generatedInvoicesMap && window.generatedInvoicesMap[num];
 
@@ -1306,7 +1376,7 @@ function viewPdfInvoice(num, fallbackName, fallbackSub, fallbackVat, fallbackNet
     document.getElementById('pdf-inv-num').innerText = num;
     document.getElementById('pdf-cust-name').innerText = name;
     document.getElementById('pdf-total-display').innerText = total.toFixed(2) + ' SAR';
-    
+
     var wordsArEl = document.getElementById('pdf-total-words-ar');
     var wordsEnEl = document.getElementById('pdf-total-words-en');
     if (wordsArEl) wordsArEl.innerText = numberToWordsArabic(total);
@@ -1329,6 +1399,8 @@ function viewPdfInvoice(num, fallbackName, fallbackSub, fallbackVat, fallbackNet
             tbody.appendChild(tr);
         });
     }
+
+    switchInvoiceLanguage('<?= $isArabic ? "ar" : "en" ?>');
 
     var qrContent = 'ZATCA|Seller:<?= urlencode($companyNameEn) ?>|VAT:<?= $vatNum ?>|Inv:' + num + '|Total:' + total.toFixed(2) + '|VAT:' + vat.toFixed(2);
     document.getElementById('pdf-zatca-qr-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(qrContent);
