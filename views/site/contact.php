@@ -98,9 +98,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?= $isArabic ? Html::encode($company['name_ar'] ?? '') : Html::encode($company['name_en'] ?? '') ?>
                                     </h4>
 
-                                    <div class="p-3 bg-white rounded-3 border mb-4 extra-small text-muted">
-                                        <div><i class="bi bi-card-text me-1 text-primary"></i> <strong><?= $isArabic ? 'السجل التجاري (CR):' : 'CR Number:' ?></strong> <?= Html::encode($company['cr_number'] ?? '1010889421') ?></div>
-                                        <div class="mt-1"><i class="bi bi-receipt me-1 text-success"></i> <strong><?= $isArabic ? 'الرقم الضريبي (VAT):' : 'VAT Number:' ?></strong> <?= Html::encode($company['vat_number'] ?? '310488942100003') ?></div>
+                                    <div class="p-3 bg-white rounded-3 border mb-4 text-muted">
+                                        <div class="row g-2 text-center text-md-start extra-small">
+                                            <div class="col-6 border-end">
+                                                <div class="text-muted"><i class="bi bi-card-text me-1 text-primary"></i> <strong><?= $isArabic ? 'السجل التجاري (CR)' : 'CR Number' ?></strong></div>
+                                                <div class="fw-bold text-dark mt-1"><?= Html::encode($company['cr_number'] ?? '1010889421') ?></div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="text-muted"><i class="bi bi-receipt me-1 text-success"></i> <strong><?= $isArabic ? 'الرقم الضريبي (VAT)' : 'VAT Number' ?></strong></div>
+                                                <div class="fw-bold text-dark mt-1"><?= Html::encode($company['vat_number'] ?? '310488942100003') ?></div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="d-flex align-items-start gap-3 mb-4">

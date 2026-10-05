@@ -604,87 +604,117 @@ $unitEn = Html::encode($company['unit_no_en'] ?? 'Office 402');
                 <form id="company-settings-form" action="<?= Url::to(['/site/save-company-settings']) ?>" method="POST">
                     <input type="hidden" name="<?= Yii::$app->request->csrfParam ?>" value="<?= Yii::$app->request->getCsrfToken() ?>">
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'اسم الشركة / المؤسسة (بالعربية)' : 'Official Company Name (Arabic)' ?> <span class="text-danger">*</span></label>
-                            <input type="text" name="Company[name_ar]" class="form-control form-control-lg" value="<?= $companyNameAr ?>" required>
+                    <!-- Shared Registration & Contact Details Section (Two Columns) -->
+                    <div class="p-4 bg-light rounded-4 border mb-4">
+                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-shield-check text-success me-2"></i><?= $isArabic ? 'بيانات السجل التجاري والترخيص والتواصل العام' : 'CR, Tax Registration & Contact Details' ?></h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark small"><?= $isArabic ? 'رقم السجل التجاري (CR Number)' : 'Commercial Register (CR Number)' ?> <span class="text-danger">*</span></label>
+                                <input type="text" name="Company[cr_number]" class="form-control" value="<?= $crNum ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark small"><?= $isArabic ? 'رقم التسجيل الضريبي (VAT - 15 رقم)' : 'VAT Registration Number (15 Digits)' ?> <span class="text-danger">*</span></label>
+                                <input type="text" name="Company[vat_number]" class="form-control" value="<?= $vatNum ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark small"><?= $isArabic ? 'رقم الترخيص المعتمد' : 'Licensed Activity Permit #' ?></label>
+                                <input type="text" name="Company[permit_number]" class="form-control" value="<?= $permitNum ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark small"><?= $isArabic ? 'البريد الإلكتروني المعتمد' : 'Official Support Email' ?> <span class="text-danger">*</span></label>
+                                <input type="email" name="Company[email]" class="form-control" value="<?= $compEmail ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark small"><?= $isArabic ? 'رقم الهاتف الرئيسي (Hotline)' : 'Primary Hotline Phone' ?> <span class="text-danger">*</span></label>
+                                <input type="text" name="Company[phone]" class="form-control" value="<?= $hotline ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark small"><?= $isArabic ? 'رقم الواتساب المباشر (WhatsApp)' : 'Direct WhatsApp Number' ?> <span class="text-danger">*</span></label>
+                                <input type="text" name="Company[whatsapp]" class="form-control" value="<?= $waNum ?>" required>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'اسم الشركة / المؤسسة (بالإنجليزية)' : 'Official Company Name (English)' ?> <span class="text-danger">*</span></label>
-                            <input type="text" name="Company[name_en]" class="form-control form-control-lg" value="<?= $companyNameEn ?>" required>
+                    </div>
+
+                    <!-- Side-by-Side Two Columns for Bilingual Information -->
+                    <div class="row g-4">
+                        <!-- Left Column: Arabic Information -->
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 bg-white border border-secondary border-opacity-10 p-4">
+                                <div class="d-flex align-items-center gap-2 border-bottom pb-3 mb-3">
+                                    <span class="fs-4">🇸🇦</span>
+                                    <h5 class="fw-extrabold text-dark m-0">البيانات والعنوان باللغة العربية</h5>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-dark small">اسم الشركة / المؤسسة الرسمي (بالعربية) <span class="text-danger">*</span></label>
+                                        <input type="text" name="Company[name_ar]" class="form-control form-control-lg" value="<?= $companyNameAr ?>" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">رقم المبنى</label>
+                                        <input type="text" name="Company[building_no]" class="form-control" value="<?= $bldg ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">الرمز الإضافي</label>
+                                        <input type="text" name="Company[additional_no]" class="form-control" value="<?= $addNo ?>">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-dark small">اسم الشارع (بالعربية)</label>
+                                        <input type="text" name="Company[street_ar]" class="form-control" value="<?= $streetAr ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">اسم الحي (بالعربية)</label>
+                                        <input type="text" name="Company[district_ar]" class="form-control" value="<?= $distAr ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">المدينة والرمز البريدي (بالعربية)</label>
+                                        <input type="text" name="Company[city_ar]" class="form-control" value="<?= $cityAr ?>">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-dark small">رقم الوحدة / الملاحظات (بالعربية)</label>
+                                        <input type="text" name="Company[unit_no_ar]" class="form-control" value="<?= $unitAr ?>">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم السجل التجاري (CR Number)' : 'Commercial Register (CR Number)' ?> <span class="text-danger">*</span></label>
-                            <input type="text" name="Company[cr_number]" class="form-control form-control-lg" value="<?= $crNum ?>" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم التسجيل الضريبي (VAT Number - 15 رقم)' : 'VAT Identification Number (15 Digits)' ?> <span class="text-danger">*</span></label>
-                            <input type="text" name="Company[vat_number]" class="form-control form-control-lg" value="<?= $vatNum ?>" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الترخيص المعتمد' : 'Licensed Activity Permit #' ?></label>
-                            <input type="text" name="Company[permit_number]" class="form-control form-control-lg" value="<?= $permitNum ?>">
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الهاتف الرئيسي للاتصال (Hotline)' : 'Primary Hotline Phone' ?> <span class="text-danger">*</span></label>
-                            <input type="text" name="Company[phone]" class="form-control form-control-lg" value="<?= $hotline ?>" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'رقم الواتساب المباشر (WhatsApp)' : 'Direct WhatsApp Number' ?> <span class="text-danger">*</span></label>
-                            <input type="text" name="Company[whatsapp]" class="form-control form-control-lg" value="<?= $waNum ?>" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold text-dark"><?= $isArabic ? 'البريد الإلكتروني للشركة' : 'Official Support Email' ?> <span class="text-danger">*</span></label>
-                            <input type="email" name="Company[email]" class="form-control form-control-lg" value="<?= $compEmail ?>" required>
-                        </div>
-
-                        <div class="col-12">
-                            <h5 class="fw-bold text-dark mt-4 mb-2"><i class="bi bi-map me-2 text-danger"></i><?= $isArabic ? 'العنوان الوطني الرسمي باللغتين (National Address Details)' : 'Bilingual National Address Details' ?></h5>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'رقم المبنى (Building No)' : 'Building No' ?></label>
-                            <input type="text" name="Company[building_no]" class="form-control" value="<?= $bldg ?>">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'اسم الشارع (عربي)' : 'Street Name (Arabic)' ?></label>
-                            <input type="text" name="Company[street_ar]" class="form-control" value="<?= $streetAr ?>">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'اسم الشارع (إنجليزي)' : 'Street Name (English)' ?></label>
-                            <input type="text" name="Company[street_en]" class="form-control" value="<?= $streetEn ?>">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'الرمز الإضافي' : 'Additional No' ?></label>
-                            <input type="text" name="Company[additional_no]" class="form-control" value="<?= $addNo ?>">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'الحي (عربي)' : 'District (Arabic)' ?></label>
-                            <input type="text" name="Company[district_ar]" class="form-control" value="<?= $distAr ?>">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'الحي (إنجليزي)' : 'District (English)' ?></label>
-                            <input type="text" name="Company[district_en]" class="form-control" value="<?= $distEn ?>">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'المدينة والرمز البريدي (عربي)' : 'City & Zip (Arabic)' ?></label>
-                            <input type="text" name="Company[city_ar]" class="form-control" value="<?= $cityAr ?>">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'المدينة والرمز البريدي (إنجليزي)' : 'City & Zip (English)' ?></label>
-                            <input type="text" name="Company[city_en]" class="form-control" value="<?= $cityEn ?>">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'الوحدة / الرقم الإضافي (عربي)' : 'Unit / Suite No (Arabic)' ?></label>
-                            <input type="text" name="Company[unit_no_ar]" class="form-control" value="<?= $unitAr ?>">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small"><?= $isArabic ? 'الوحدة / الرقم الإضافي (إنجليزي)' : 'Unit / Suite No (English)' ?></label>
-                            <input type="text" name="Company[unit_no_en]" class="form-control" value="<?= $unitEn ?>">
+                        <!-- Right Column: English Information -->
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 bg-white border border-secondary border-opacity-10 p-4">
+                                <div class="d-flex align-items-center gap-2 border-bottom pb-3 mb-3">
+                                    <span class="fs-4">🌐</span>
+                                    <h5 class="fw-extrabold text-dark m-0">Official Details in English</h5>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-dark small">Official Company Name (English) <span class="text-danger">*</span></label>
+                                        <input type="text" name="Company[name_en]" class="form-control form-control-lg" value="<?= $companyNameEn ?>" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">Building Number</label>
+                                        <input type="text" class="form-control bg-light" value="<?= $bldg ?>" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">Additional No</label>
+                                        <input type="text" class="form-control bg-light" value="<?= $addNo ?>" readonly>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-dark small">Street Name (English)</label>
+                                        <input type="text" name="Company[street_en]" class="form-control" value="<?= $streetEn ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">District Name (English)</label>
+                                        <input type="text" name="Company[district_en]" class="form-control" value="<?= $distEn ?>">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-dark small">City & Postal Zip (English)</label>
+                                        <input type="text" name="Company[city_en]" class="form-control" value="<?= $cityEn ?>">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold text-dark small">Unit / Suite Details (English)</label>
+                                        <input type="text" name="Company[unit_no_en]" class="form-control" value="<?= $unitEn ?>">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
